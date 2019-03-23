@@ -101,4 +101,17 @@ class Player extends StatelessWidget {
       color: Colors.white,
     );
   }
+
+  Widget tapArea({bool isPlus, int player}) {
+    return GestureDetector(
+      onTapDown: (_) => null,
+      onTapUp: (_) => null,
+      child: Expanded(
+        flex: 5,
+        child: Container(
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
 }
