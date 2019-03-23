@@ -1,4 +1,5 @@
 /** This widget handles the player fields on the home screen */
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class Player extends StatelessWidget {
@@ -13,11 +14,14 @@ class Player extends StatelessWidget {
 
     return Expanded(
       flex: 5,
-      child: Stack(
-        children: <Widget>[
-          playerInfo(),
-          plusMinus(),
-        ],
+      child: Transform.rotate(
+        angle: (playerNum == 1) ? math.pi : 0,
+        child: Stack(
+          children: <Widget>[
+            playerInfo(),
+            plusMinus(),
+          ],
+        ),
       ),
     );
   }
