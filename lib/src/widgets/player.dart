@@ -64,13 +64,37 @@ class Player extends StatelessWidget {
   }
 
   Widget plusMinus() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('-'),
-        Text('+'),
+        Container(
+          margin: EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '-',
+                style: plusMinusFormatting(),
+              ),
+              Text(
+                '+',
+                style: plusMinusFormatting(),
+              ),
+            ],
+          ),
+        ),
       ],
+    );
+  }
+
+  TextStyle plusMinusFormatting() {
+    return TextStyle(
+      fontSize: 40.0,
+      color: Colors.white,
     );
   }
 }
