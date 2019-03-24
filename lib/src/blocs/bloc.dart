@@ -45,8 +45,6 @@ class Bloc {
     } else {
       activeStream.sink.add(activeStream.value--);
     }
-
-    activeStream.close();
   }
 
   BehaviorSubject<int> getScoreStream({int player, bool addToScore}) {
@@ -68,8 +66,17 @@ class Bloc {
     );
 
     activeStream.sink.add(true);
+  }
 
-    activeStream.close();
+  void deactivateClickArea({int player, bool addToScore}) {
+    // Choose stream we're updating.
+    BehaviorSubject<bool> activeStream = getClickAreaStream(
+      player: player,
+      addToScore: addToScore,
+    );
+
+    // Set current value to null
+    activeStream.sink.add(null);
   }
 
   BehaviorSubject<bool> getClickAreaStream({int player, bool addToScore}) {
