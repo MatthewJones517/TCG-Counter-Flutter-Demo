@@ -206,6 +206,8 @@ class Player extends StatelessWidget {
             player: playerNum,
             addToScore: isPlus,
           );
+
+          _bloc.stopTimer();
         },
         // This has to be defined or else the area doesn't deactivate if the user
         // slides their finger off it after tapping down.
@@ -214,6 +216,8 @@ class Player extends StatelessWidget {
             player: playerNum,
             addToScore: isPlus,
           );
+
+          _bloc.stopTimer();
         },
         child: Container(
           color: Color.fromRGBO(0, 0, 0, 0),

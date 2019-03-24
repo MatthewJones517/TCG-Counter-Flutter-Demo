@@ -22,6 +22,11 @@ class Bloc {
   BehaviorSubject<bool> get clickAreaP2PlusStream => _clickAreaP2Plus.stream;
   BehaviorSubject<bool> get clickAreaP2MinusStream => _clickAreaP2Minus.stream;
 
+  // Timer used to autoincrement score as button is held down
+  Timer _timer;
+  int _timerStartingSpeed = 500;
+  int _timerCurrentSpeed = 500;
+
   Bloc() {
     init();
   }
@@ -46,7 +51,28 @@ class Bloc {
       value--;
     }
 
+    // Add new score to sink
     activeStream.sink.add(value);
+
+    // Update timer speed and call this method recursively
+    _timer = new Timer(new Duration(milliseconds: _timerCurrentSpeed), () {
+      // Keep deducting the time before the next increment by 50 seconds until we
+      // get to the minimum amount of 100.
+      if (_timerCurrentSpeed > 150) {
+        _timerCurrentSpeed -= 50;
+      }
+
+      // Call this method recursively
+      updateScore(
+        player: player,
+        addToScore: addToScore,
+      );
+    });
+  }
+
+  void stopTimer() {
+    _timer.cancel();
+    _timerCurrentSpeed = _timerStartingSpeed;
   }
 
   BehaviorSubject<int> getScoreStream({int player}) {
