@@ -36,18 +36,20 @@ class Bloc {
     // Choose the stream we're updating.
     BehaviorSubject<int> activeStream = getScoreStream(
       player: player,
-      addToScore: addToScore,
     );
 
     // Update score accordingly
+    int value = activeStream.value;
     if (addToScore) {
-      activeStream.sink.add(activeStream.value++);
+      value++;
     } else {
-      activeStream.sink.add(activeStream.value--);
+      value--;
     }
+
+    activeStream.sink.add(value);
   }
 
-  BehaviorSubject<int> getScoreStream({int player, bool addToScore}) {
+  BehaviorSubject<int> getScoreStream({int player}) {
     BehaviorSubject<int> activeStream;
     if (player == 1) {
       activeStream = _player1Score;

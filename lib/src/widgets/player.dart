@@ -18,7 +18,7 @@ class Player extends StatelessWidget {
     _bloc = Provider.of(context);
     screenWidth = MediaQuery.of(context).size.width;
 
-    // Return the actual player area. This is a stack made up of several elements. 
+    // Return the actual player area. This is a stack made up of several elements.
     return Expanded(
       flex: 5,
       child: Transform.rotate(
@@ -69,14 +69,27 @@ class Player extends StatelessWidget {
   }
 
   Widget playerScore() {
-    return Text(
-      '20',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: screenWidth * .3,
-        fontWeight: FontWeight.bold,
-      ),
+    // Get the appropriate stream
+    BehaviorSubject<int> scoreStream = _bloc.getScoreStream(player: playerNum);
+
+    // Return the score as a streambuilder
+    return StreamBuilder(
+      stream: scoreStream.stream,
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+
+        return Text(
+          snapshot.data.toString(),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: screenWidth * .3,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      },
     );
   }
 
@@ -117,7 +130,7 @@ class Player extends StatelessWidget {
 
   // Returns the tap area indicators, which is just a semi-transparent black box. We have
   // to define colors for the containers or else they have no size, so we just define
-  // transparent colors. 
+  // transparent colors.
   Widget tapIndicators() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,7 +171,7 @@ class Player extends StatelessWidget {
     );
   }
 
-  // This sets up the areas the user can tap to increment or decrement the score. 
+  // This sets up the areas the user can tap to increment or decrement the score.
   Widget tapAreas() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -195,7 +208,7 @@ class Player extends StatelessWidget {
           );
         },
         // This has to be defined or else the area doesn't deactivate if the user
-        // slides their finger off it after tapping down. 
+        // slides their finger off it after tapping down.
         onTapCancel: () {
           _bloc.deactivateClickArea(
             player: playerNum,
