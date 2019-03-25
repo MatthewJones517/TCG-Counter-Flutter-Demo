@@ -55,7 +55,7 @@ class Player extends StatelessWidget {
 
   Widget playerTitle() {
     return Padding(
-      padding: EdgeInsets.only(bottom: (screenWidth * .05)),
+      padding: EdgeInsets.only(bottom: (screenWidth * .0025)),
       child: Text(
         "Player ${playerNum.toString()}",
         textAlign: TextAlign.center,
