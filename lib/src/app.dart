@@ -7,6 +7,7 @@ class App extends StatelessWidget {
     return Provider(
       child: MaterialApp(
         title: 'TCG Counter',
+        debugShowCheckedModeBanner: false,
         home: Home(),
       ),
     );
