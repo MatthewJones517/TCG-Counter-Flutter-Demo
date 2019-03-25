@@ -9,6 +9,11 @@ class Home extends StatelessWidget {
     _bloc = Provider.of(context);
 
     return Scaffold(
+      drawer: Drawer(
+        child:Container(
+          color: Colors.grey[900],
+        )
+      ),
       appBar: AppBar(
         title: Text('TCG Counter'),
         actions: <Widget>[
