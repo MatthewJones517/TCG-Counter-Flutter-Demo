@@ -39,6 +39,7 @@ class Player extends StatelessWidget {
     );
   }
 
+  // Display player title and current score
   Widget playerInfo() {
     return Container(
       color: playerColor,
