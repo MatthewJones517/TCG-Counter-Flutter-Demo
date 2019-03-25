@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import '../widgets/player.dart';
+import '../blocs/provider.dart';
 
 class Home extends StatelessWidget {
+  Bloc _bloc;
+
   Widget build(context) {
+    _bloc = Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('TCG Counter'),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.refresh),
+              tooltip: 'Reset Scores',
+              onPressed: () {
+                _bloc.resetScores();
+              }),
+        ],
         backgroundColor: Colors.grey[800],
       ),
       body: Column(

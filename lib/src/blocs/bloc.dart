@@ -75,6 +75,11 @@ class Bloc {
     _timerCurrentSpeed = _timerStartingSpeed;
   }
 
+  void resetScores() {
+    _player1Score.sink.add(20);
+    _player2Score.sink.add(20);
+  }
+
   BehaviorSubject<int> getScoreStream({int player}) {
     BehaviorSubject<int> activeStream;
     if (player == 1) {
