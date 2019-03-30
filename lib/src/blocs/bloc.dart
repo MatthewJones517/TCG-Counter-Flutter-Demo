@@ -4,6 +4,7 @@
 
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
+import '../resources/repository.dart';
 
 class Bloc {
   // Streams
@@ -27,14 +28,32 @@ class Bloc {
   int _timerStartingSpeed = 500;
   int _timerCurrentSpeed = 500;
 
+  // Get repository
+  Repository _repository = Repository();
+
+  // Settings
+  int defaultScore = 20;
+
   Bloc() {
     init();
   }
 
   void init() async {
-    // Set player scores to defaults
-    _player1Score.sink.add(20);
-    _player2Score.sink.add(20);
+    // Set player scores to whatever value is saved in memory.
+    int p1Score = await _repository.getScore(
+        playerNum: 1,
+      );
+
+    int p2Score = await _repository.getScore(
+        playerNum: 2,
+      );
+    
+    _player1Score.sink.add(
+      (p1Score != null) ? p1Score : defaultScore,
+    );
+    _player2Score.sink.add(
+      (p2Score != null) ? p2Score : defaultScore,
+    );
   }
 
   void updateScore({int player, bool addToScore}) async {
@@ -76,8 +95,13 @@ class Bloc {
   }
 
   void resetScores() {
-    _player1Score.sink.add(20);
-    _player2Score.sink.add(20);
+    // Reset Stream
+    _player1Score.sink.add(defaultScore);
+    _player2Score.sink.add(defaultScore);
+
+    // Reset saved values
+    _repository.saveScore(playerNum: 1, score: defaultScore);
+    _repository.saveScore(playerNum: 2, score: defaultScore);
   }
 
   BehaviorSubject<int> getScoreStream({int player}) {
@@ -110,6 +134,17 @@ class Bloc {
 
     // Set current value to null
     activeStream.sink.add(null);
+
+    // Get the stream that has the current score
+    BehaviorSubject<int> scoreStream = getScoreStream(
+      player: player,
+    );
+
+    // Save player score
+    _repository.saveScore(
+      playerNum: player,
+      score: scoreStream.value,
+    );
   }
 
   BehaviorSubject<bool> getClickAreaStream({int player, bool addToScore}) {
