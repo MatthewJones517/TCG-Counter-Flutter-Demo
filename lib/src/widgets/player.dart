@@ -192,7 +192,7 @@ class Player extends StatelessWidget {
       flex: 5,
       child: GestureDetector(
         onTapDown: (_) {
-          _bloc.activateClickArea(
+          _bloc.handleTapDown(
             player: playerNum,
             addToScore: isPlus,
           );
@@ -203,7 +203,7 @@ class Player extends StatelessWidget {
           );
         },
         onTapUp: (_) {
-          _bloc.deactivateClickArea(
+          _bloc.handleTapUp(
             player: playerNum,
             addToScore: isPlus,
           );
@@ -213,7 +213,7 @@ class Player extends StatelessWidget {
         // This has to be defined or else the area doesn't deactivate if the user
         // slides their finger off it after tapping down.
         onTapCancel: () {
-          _bloc.deactivateClickArea(
+          _bloc.handleTapUp(
             player: playerNum,
             addToScore: isPlus,
           );

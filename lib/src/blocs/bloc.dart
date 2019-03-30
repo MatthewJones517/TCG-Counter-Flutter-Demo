@@ -115,7 +115,7 @@ class Bloc {
     return activeStream;
   }
 
-  void activateClickArea({int player, bool addToScore}) {
+  void handleTapDown({int player, bool addToScore}) {
     // Choose stream we're updating.
     BehaviorSubject<bool> activeStream = getClickAreaStream(
       player: player,
@@ -125,7 +125,7 @@ class Bloc {
     activeStream.sink.add(true);
   }
 
-  void deactivateClickArea({int player, bool addToScore}) {
+  void handleTapUp({int player, bool addToScore}) {
     // Choose stream we're updating.
     BehaviorSubject<bool> activeStream = getClickAreaStream(
       player: player,
