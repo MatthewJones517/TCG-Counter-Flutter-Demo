@@ -2,6 +2,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'second_counter.dart';
 import '../blocs/provider.dart';
 
 class Player extends StatelessWidget {
@@ -33,6 +34,8 @@ class Player extends StatelessWidget {
             tapIndicators(),
             // Catches user taps
             tapAreas(),
+            // Secondary Counter
+            SecondCounter(),
           ],
         ),
       ),
@@ -81,13 +84,16 @@ class Player extends StatelessWidget {
           return Container();
         }
 
-        return Text(
-          snapshot.data.toString(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: screenWidth * .3,
-            fontWeight: FontWeight.bold,
+        return Padding(
+          padding:EdgeInsets.only(bottom: screenWidth * .15),
+          child: Text(
+            snapshot.data.toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: screenWidth * .3,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         );
       },
