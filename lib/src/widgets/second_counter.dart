@@ -34,7 +34,10 @@ class SecondCounter extends StatelessWidget {
             color: (playerNum == 1) ? Colors.red[300] : Colors.blue[300],
           ),
           child: Stack(
-            children: <Widget>[altCtrDeactivatedOverlay(context)],
+            children: <Widget>[
+              secondaryCounterScore(context),
+              altCtrDeactivatedOverlay(context),
+            ],
           ),
         ),
       ),
@@ -51,7 +54,7 @@ class SecondCounter extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius:
                   BorderRadius.all(Radius.circular(screenWidth * .02)),
-                  color: Color.fromARGB(75, 0, 0, 0),
+              color: Color.fromARGB(75, 0, 0, 0),
             ),
           );
         }
@@ -60,5 +63,27 @@ class SecondCounter extends StatelessWidget {
         return Container();
       },
     );
+  }
+
+  Widget secondaryCounterScore(BuildContext context) {
+    return StreamBuilder(
+      stream: _bloc.getAltCtrScoreStream(playerNum: playerNum),
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[Text(snapshot.data.toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: screenWidth * .085,
+            ),
+          ),],);
+        }
+
+        return Container();
+      },
+    );  
   }
 }

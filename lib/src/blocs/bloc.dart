@@ -62,6 +62,10 @@ class Bloc {
     _player2Score.sink.add(
       (p2Score != null) ? p2Score : defaultScore,
     );
+
+    // Set secondary counters
+    _player1AltCtr.sink.add(0);
+    _player2AltCtr.sink.add(0);
   }
 
   void updateScore({int player, bool addToScore}) async {
@@ -193,6 +197,14 @@ class Bloc {
     }
 
     return _clickAreaP2AltCtr;
+  }
+
+  BehaviorSubject<int> getAltCtrScoreStream({int playerNum}) {
+    if (playerNum == 1) {
+      return _player1AltCtr;
+    } else {
+      return _player2AltCtr;
+    }
   }
 
   void dispose() {
