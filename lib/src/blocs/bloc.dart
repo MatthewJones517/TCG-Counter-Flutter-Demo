@@ -119,9 +119,17 @@ class Bloc {
   BehaviorSubject<int> getScoreStream({int player}) {
     BehaviorSubject<int> activeStream;
     if (player == 1) {
-      activeStream = _player1Score;
+      if (_clickAreaP1AltCtr.value != true){
+        activeStream = _player1Score;
+      } else {
+        activeStream = _player1AltCtr;
+      }
     } else {
-      activeStream = _player2Score;
+      if (_clickAreaP2AltCtr.value != true){
+        activeStream = _player2Score;
+      } else {
+        activeStream = _player2AltCtr;
+      }
     }
 
     return activeStream;
