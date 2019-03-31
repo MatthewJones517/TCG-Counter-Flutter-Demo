@@ -10,18 +10,26 @@ class Bloc {
   // Streams
   final BehaviorSubject<int> _player1Score = BehaviorSubject<int>();
   final BehaviorSubject<int> _player2Score = BehaviorSubject<int>();
+  final BehaviorSubject<int> _player1AltCtr = BehaviorSubject<int>();
+  final BehaviorSubject<int> _player2AltCtr = BehaviorSubject<int>();
   final BehaviorSubject<bool> _clickAreaP1Plus = BehaviorSubject<bool>();
   final BehaviorSubject<bool> _clickAreaP1Minus = BehaviorSubject<bool>();
   final BehaviorSubject<bool> _clickAreaP2Plus = BehaviorSubject<bool>();
   final BehaviorSubject<bool> _clickAreaP2Minus = BehaviorSubject<bool>();
+  final BehaviorSubject<bool> _clickAreaP1AltCtr = BehaviorSubject<bool>();
+  final BehaviorSubject<bool> _clickAreaP2AltCtr = BehaviorSubject<bool>();
 
   // Stream Getters
   BehaviorSubject<int> get player1ScoreStream => _player1Score.stream;
   BehaviorSubject<int> get player2ScoreStream => _player2Score.stream;
+  BehaviorSubject<int> get player1AltCtr => _player1AltCtr.stream;
+  BehaviorSubject<int> get player2AltCtr => _player2AltCtr.stream;
   BehaviorSubject<bool> get clickAreaP1PlusStream => _clickAreaP1Plus.stream;
   BehaviorSubject<bool> get clickAreaP1MinusStream => _clickAreaP1Minus.stream;
   BehaviorSubject<bool> get clickAreaP2PlusStream => _clickAreaP2Plus.stream;
   BehaviorSubject<bool> get clickAreaP2MinusStream => _clickAreaP2Minus.stream;
+  BehaviorSubject<bool> get clickAreaP1AltCtr => _clickAreaP1AltCtr.stream;
+  BehaviorSubject<bool> get clickAreaP2AltCtr => _clickAreaP2AltCtr.stream;
 
   // Timer used to autoincrement score as button is held down
   Timer _timer;
