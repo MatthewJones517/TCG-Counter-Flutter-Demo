@@ -35,7 +35,9 @@ class Player extends StatelessWidget {
             // Catches user taps
             tapAreas(),
             // Secondary Counter
-            SecondCounter(),
+            SecondCounter(
+              playerNum: playerNum,
+            ),
           ],
         ),
       ),
