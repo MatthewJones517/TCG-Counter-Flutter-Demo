@@ -178,7 +178,7 @@ class Bloc {
 
   void toggleAltCtr({int playerNum}) {
     BehaviorSubject<bool> activeStream =
-        _getAltCtrClickAreaStream(playerNum: playerNum);
+        getAltCtrClickAreaStream(playerNum: playerNum);
 
     if(activeStream.value == null) {
       activeStream.sink.add(true);
@@ -187,7 +187,7 @@ class Bloc {
     }
   }
 
-  BehaviorSubject<bool> _getAltCtrClickAreaStream({int playerNum}) {
+  BehaviorSubject<bool> getAltCtrClickAreaStream({int playerNum}) {
     if (playerNum == 1) {
       return _clickAreaP1AltCtr;
     }

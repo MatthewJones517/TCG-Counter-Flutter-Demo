@@ -31,10 +31,34 @@ class SecondCounter extends StatelessWidget {
           margin: EdgeInsets.only(top: screenWidth * .50),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(screenWidth * .02)),
-            color: (playerNum == 1) ? Colors.red[100] : Colors.blue[200],
+            color: (playerNum == 1) ? Colors.red[300] : Colors.blue[300],
+          ),
+          child: Stack(
+            children: <Widget>[altCtrDeactivatedOverlay(context)],
           ),
         ),
       ),
+    );
+  }
+
+  Widget altCtrDeactivatedOverlay(BuildContext context) {
+    return StreamBuilder(
+      stream: _bloc.getAltCtrClickAreaStream(playerNum: playerNum),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        // Deactivate clickarea
+        if (!snapshot.hasData || snapshot.data == false) {
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(screenWidth * .02)),
+                  color: Color.fromARGB(75, 0, 0, 0),
+            ),
+          );
+        }
+
+        // Activate clickarea
+        return Container();
+      },
     );
   }
 }
