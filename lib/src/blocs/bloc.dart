@@ -49,13 +49,13 @@ class Bloc {
   void init() async {
     // Set player scores to whatever value is saved in memory.
     int p1Score = await _repository.getScore(
-        playerNum: 1,
-      );
+      playerNum: 1,
+    );
 
     int p2Score = await _repository.getScore(
-        playerNum: 2,
-      );
-    
+      playerNum: 2,
+    );
+
     _player1Score.sink.add(
       (p1Score != null) ? p1Score : defaultScore,
     );
@@ -174,6 +174,26 @@ class Bloc {
     }
 
     return activeStream;
+  }
+
+  void toggleAltCtr({int playerNum}) {
+    BehaviorSubject<bool> activeStream =
+        _getAltCtrClickAreaStream(playerNum: playerNum);
+
+    if(activeStream.value == null) {
+      activeStream.sink.add(true);
+    } else {
+      activeStream.sink.add(!activeStream.value);
+    }
+    print(activeStream.value);
+  }
+
+  BehaviorSubject<bool> _getAltCtrClickAreaStream({int playerNum}) {
+    if (playerNum == 1) {
+      return _clickAreaP1AltCtr;
+    }
+
+    return _clickAreaP2AltCtr;
   }
 
   void dispose() {

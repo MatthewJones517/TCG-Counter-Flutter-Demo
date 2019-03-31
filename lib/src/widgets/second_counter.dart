@@ -22,7 +22,7 @@ class SecondCounter extends StatelessWidget {
     // Create widget
     return GestureDetector(
       onTap: () {
-        print('Tapped');
+        _bloc.toggleAltCtr(playerNum: playerNum);
       },
       child: Center(
         child: Container(
