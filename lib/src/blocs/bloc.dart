@@ -185,7 +185,6 @@ class Bloc {
     } else {
       activeStream.sink.add(!activeStream.value);
     }
-    print(activeStream.value);
   }
 
   BehaviorSubject<bool> _getAltCtrClickAreaStream({int playerNum}) {
