@@ -112,6 +112,8 @@ class Bloc {
     _player2Score.sink.add(defaultScore);
     _player1AltCtr.sink.add(0);
     _player2AltCtr.sink.add(0);
+    _clickAreaP1AltCtr.add(false);
+    _clickAreaP2AltCtr.add(false);
 
     // Reset saved values
     _repository.saveScore(playerNum: 1, score: defaultScore);
