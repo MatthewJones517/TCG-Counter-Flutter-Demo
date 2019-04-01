@@ -110,6 +110,8 @@ class Bloc {
     // Reset Stream
     _player1Score.sink.add(defaultScore);
     _player2Score.sink.add(defaultScore);
+    _player1AltCtr.sink.add(0);
+    _player2AltCtr.sink.add(0);
 
     // Reset saved values
     _repository.saveScore(playerNum: 1, score: defaultScore);
