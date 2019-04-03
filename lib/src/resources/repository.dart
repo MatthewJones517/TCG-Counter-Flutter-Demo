@@ -19,4 +19,17 @@ class Repository {
       playerNum: playerNum,
     );
   }
+
+  void saveCtr({int playerNum, int ctr}) {
+    _prefsProvider.savePlayerCounter(
+      playerNum: playerNum,
+      ctrAmt: ctr,
+    );
+  }
+
+  Future<int> getCtr({int playerNum}) async {
+    return _prefsProvider.getPlayerCtr(
+      playerNum: playerNum,
+    );
+  }
 }

@@ -56,6 +56,14 @@ class Bloc {
       playerNum: 2,
     );
 
+    int p1Ctr = await _repository.getCtr(
+      playerNum: 1,
+    );
+
+    int p2Ctr = await _repository.getCtr(
+      playerNum: 2,
+    );
+
     _player1Score.sink.add(
       (p1Score != null) ? p1Score : defaultScore,
     );
@@ -64,8 +72,8 @@ class Bloc {
     );
 
     // Set secondary counters
-    _player1AltCtr.sink.add(0);
-    _player2AltCtr.sink.add(0);
+    _player1AltCtr.sink.add(p1Ctr);
+    _player2AltCtr.sink.add(p2Ctr);
   }
 
   void updateScore({int player, bool addToScore}) async {
@@ -118,18 +126,20 @@ class Bloc {
     // Reset saved values
     _repository.saveScore(playerNum: 1, score: defaultScore);
     _repository.saveScore(playerNum: 2, score: defaultScore);
+    _repository.saveCtr(playerNum: 1, ctr: 0);
+    _repository.saveCtr(playerNum: 2, ctr: 0);
   }
 
   BehaviorSubject<int> getScoreStream({int player}) {
     BehaviorSubject<int> activeStream;
     if (player == 1) {
-      if (_clickAreaP1AltCtr.value != true){
+      if (_clickAreaP1AltCtr.value != true) {
         activeStream = _player1Score;
       } else {
         activeStream = _player1AltCtr;
       }
     } else {
-      if (_clickAreaP2AltCtr.value != true){
+      if (_clickAreaP2AltCtr.value != true) {
         activeStream = _player2Score;
       } else {
         activeStream = _player2AltCtr;
@@ -164,11 +174,19 @@ class Bloc {
       player: player,
     );
 
-    // Save player score
-    _repository.saveScore(
-      playerNum: player,
-      score: scoreStream.value,
-    );
+    if (scoreStream == _player1Score || scoreStream == _player2Score) {
+      // Save player score
+      _repository.saveScore(
+        playerNum: player,
+        score: scoreStream.value,
+      );
+    } else {
+      // Save player counter
+      _repository.saveCtr(
+        playerNum: player,
+        ctr: scoreStream.value,
+      );
+    }
   }
 
   BehaviorSubject<bool> getClickAreaStream({int player, bool addToScore}) {
@@ -196,7 +214,7 @@ class Bloc {
     BehaviorSubject<bool> activeStream =
         getAltCtrClickAreaStream(playerNum: playerNum);
 
-    if(activeStream.value == null) {
+    if (activeStream.value == null) {
       activeStream.sink.add(true);
     } else {
       activeStream.sink.add(!activeStream.value);

@@ -48,7 +48,7 @@ class PrefsProvider {
 
     int ctr = await prefs.getInt('player' + playerNum.toString() + 'ctr');
 
-    if (ctr != null) {
+    if (ctr != null && ctr != '') {
       return ctr;
     }
 
