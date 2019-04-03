@@ -37,4 +37,21 @@ class PrefsProvider {
 
     return null;
   }
+
+  void savePlayerCounter({int playerNum, int ctrAmt}) async {
+    await prefsReady;
+    prefs.setInt('player' + playerNum.toString() + 'ctr', ctrAmt);
+  }
+
+  Future<int> getPlayerCtr({int playerNum}) async {
+    await prefsReady;
+
+    int ctr = await prefs.getInt('player' + playerNum.toString() + 'ctr');
+
+    if (ctr != null) {
+      return ctr;
+    }
+
+    return 0;
+  }
 }
