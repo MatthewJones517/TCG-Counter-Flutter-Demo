@@ -11,7 +11,10 @@ class Player extends StatelessWidget {
   final int playerNum;
   final bool isPortrait;
 
-  Player({@required this.playerColor, @required this.playerNum, @required this.isPortrait});
+  Player(
+      {@required this.playerColor,
+      @required this.playerNum,
+      @required this.isPortrait});
 
   Widget build(context) {
     // Set up properties
@@ -28,24 +31,33 @@ class Player extends StatelessWidget {
     // Return the actual player area. This is a stack made up of several elements.
     return Expanded(
       flex: 5,
-      child: Transform.rotate(
-        angle: (playerNum == 1) ? math.pi : 0,
-        child: Stack(
-          children: <Widget>[
-            // Player name and score
-            playerInfo(_bloc, widgetWidth),
-            // Plus and minus indicators
-            plusMinus(),
-            // Activates when an area is tapped as UI feedback
-            tapIndicators(_bloc),
-            // Catches user taps
-            tapAreas(_bloc),
-            // Secondary Counter
-            SecondCounter(
-              playerNum: playerNum,
-              widgetWidth: widgetWidth,
+      child: Container(
+        color: playerColor,
+        child: Transform.rotate(
+          angle: (playerNum == 1) ? math.pi : 0,
+          child: SafeArea(
+            left: true,
+            right: true,
+            top: false,
+            bottom: false,
+            child: Stack(
+              children: <Widget>[
+                // Player name and score
+                playerInfo(_bloc, widgetWidth),
+                // Plus and minus indicators
+                plusMinus(),
+                // Activates when an area is tapped as UI feedback
+                tapIndicators(_bloc),
+                // Catches user taps
+                tapAreas(_bloc),
+                // Secondary Counter
+                SecondCounter(
+                  playerNum: playerNum,
+                  widgetWidth: widgetWidth,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -53,16 +65,13 @@ class Player extends StatelessWidget {
 
   // Display player title and current score
   Widget playerInfo(Bloc _bloc, double widgetWidth) {
-    return Container(
-      color: playerColor,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          playerTitle(widgetWidth),
-          playerScore(_bloc, widgetWidth),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        playerTitle(widgetWidth),
+        playerScore(_bloc, widgetWidth),
+      ],
     );
   }
 
@@ -152,11 +161,11 @@ class Player extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         tapAreaIndicator(
-            stream:
-                _bloc.clickAreaStreams[_bloc.getClickAreaStream(addToScore: false, player: playerNum)]),
+            stream: _bloc.clickAreaStreams[_bloc.getClickAreaStream(
+                addToScore: false, player: playerNum)]),
         tapAreaIndicator(
-            stream:
-                _bloc.clickAreaStreams[_bloc.getClickAreaStream(addToScore: true, player: playerNum)]),
+            stream: _bloc.clickAreaStreams[
+                _bloc.getClickAreaStream(addToScore: true, player: playerNum)]),
       ],
     );
   }
