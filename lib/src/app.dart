@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'blocs/provider.dart';
 import 'screens/home_screen.dart';
+import 'screens/settings.dart';
 
 class App extends StatelessWidget {
   build(context) {
@@ -17,23 +18,36 @@ class App extends StatelessWidget {
   Route routes(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return homePage();
+        return pageRoute(
+          routeName: '/',
+          child: Home(),
+        );
+        break;
+
+      case '/settings':
+        return pageRoute(
+          routeName: '/settings',
+          child: Settings(),
+        );
         break;
 
       default:
-        return homePage();
+        return pageRoute(
+          routeName: '/',
+          child: Home(),
+        );
         break;
     }
   }
 
-  // Return the Home Page widget
-  MaterialPageRoute homePage() {
+  // Return page route
+  MaterialPageRoute pageRoute({String routeName, Widget child}) {
     return MaterialPageRoute(
       settings: RouteSettings(
-        name: '/',
+        name: routeName,
       ),
       builder: (context) {
-        return Home();
+        return child;
       },
     );
   }
