@@ -6,18 +6,16 @@ import 'package:flutter/material.dart';
 import '../blocs/provider.dart';
 
 class SecondCounter extends StatelessWidget {
-  Bloc _bloc;
-  double screenWidth;
-  int playerNum;
+  final int playerNum;
 
   SecondCounter({this.playerNum});
 
   Widget build(context) {
     // Access Bloc
-    _bloc = Provider.of(context);
+    Bloc _bloc = Provider.of(context);
 
     // Get screen width. We use this to size the counter
-    screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     // Create widget
     return GestureDetector(
@@ -35,8 +33,8 @@ class SecondCounter extends StatelessWidget {
           ),
           child: Stack(
             children: <Widget>[
-              secondaryCounterScore(context),
-              altCtrDeactivatedOverlay(context),
+              secondaryCounterScore(context, _bloc, screenWidth),
+              altCtrDeactivatedOverlay(context, _bloc, screenWidth),
             ],
           ),
         ),
@@ -44,7 +42,7 @@ class SecondCounter extends StatelessWidget {
     );
   }
 
-  Widget altCtrDeactivatedOverlay(BuildContext context) {
+  Widget altCtrDeactivatedOverlay(BuildContext context, Bloc _bloc, double screenWidth) {
     return StreamBuilder(
       stream: _bloc.getAltCtrClickAreaStream(playerNum: playerNum),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -65,7 +63,7 @@ class SecondCounter extends StatelessWidget {
     );
   }
 
-  Widget secondaryCounterScore(BuildContext context) {
+  Widget secondaryCounterScore(BuildContext context, Bloc _bloc, double screenWidth) {
     return StreamBuilder(
       stream: _bloc.getAltCtrScoreStream(playerNum: playerNum),
       builder: (BuildContext context, AsyncSnapshot<int> snapshot) {

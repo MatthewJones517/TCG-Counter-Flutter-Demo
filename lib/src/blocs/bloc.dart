@@ -244,5 +244,7 @@ class Bloc {
     _clickAreaP1Minus.close();
     _clickAreaP2Plus.close();
     _clickAreaP2Minus.close();
+    _player1AltCtr.close();
+    _player2AltCtr.close();
   }
 }

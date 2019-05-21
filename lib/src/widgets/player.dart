@@ -9,15 +9,13 @@ class Player extends StatelessWidget {
   // Widget properties
   final Color playerColor;
   final int playerNum;
-  double screenWidth;
-  Bloc _bloc;
 
   Player({@required this.playerColor, @required this.playerNum});
 
   Widget build(context) {
     // Set up properties
-    _bloc = Provider.of(context);
-    screenWidth = MediaQuery.of(context).size.width;
+    Bloc _bloc = Provider.of(context);
+    double screenWidth = MediaQuery.of(context).size.width;
 
     // Return the actual player area. This is a stack made up of several elements.
     return Expanded(
@@ -27,13 +25,13 @@ class Player extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             // Player name and score
-            playerInfo(),
+            playerInfo(_bloc, screenWidth),
             // Plus and minus indicators
             plusMinus(),
             // Activates when an area is tapped as UI feedback
-            tapIndicators(),
+            tapIndicators(_bloc),
             // Catches user taps
-            tapAreas(),
+            tapAreas(_bloc),
             // Secondary Counter
             SecondCounter(
               playerNum: playerNum,
@@ -45,21 +43,21 @@ class Player extends StatelessWidget {
   }
 
   // Display player title and current score
-  Widget playerInfo() {
+  Widget playerInfo(Bloc _bloc, double screenWidth) {
     return Container(
       color: playerColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          playerTitle(),
-          playerScore(),
+          playerTitle(screenWidth),
+          playerScore(_bloc, screenWidth),
         ],
       ),
     );
   }
 
-  Widget playerTitle() {
+  Widget playerTitle(double screenWidth) {
     return Padding(
       padding: EdgeInsets.only(bottom: (screenWidth * .0025)),
       child: Text(
@@ -74,7 +72,7 @@ class Player extends StatelessWidget {
     );
   }
 
-  Widget playerScore() {
+  Widget playerScore(Bloc _bloc, double screenWidth) {
     // Get the appropriate stream
     BehaviorSubject<int> scoreStream = _bloc.getScoreStream(player: playerNum);
 
@@ -87,7 +85,7 @@ class Player extends StatelessWidget {
         }
 
         return Padding(
-          padding:EdgeInsets.only(bottom: screenWidth * .15),
+          padding: EdgeInsets.only(bottom: screenWidth * .15),
           child: Text(
             snapshot.data.toString(),
             textAlign: TextAlign.center,
@@ -140,7 +138,7 @@ class Player extends StatelessWidget {
   // Returns the tap area indicators, which is just a semi-transparent black box. We have
   // to define colors for the containers or else they have no size, so we just define
   // transparent colors.
-  Widget tapIndicators() {
+  Widget tapIndicators(Bloc _bloc) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -181,21 +179,23 @@ class Player extends StatelessWidget {
   }
 
   // This sets up the areas the user can tap to increment or decrement the score.
-  Widget tapAreas() {
+  Widget tapAreas(Bloc _bloc) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         tapArea(
+          _bloc,
           isPlus: false,
         ),
         tapArea(
+          _bloc,
           isPlus: true,
         ),
       ],
     );
   }
 
-  Widget tapArea({bool isPlus}) {
+  Widget tapArea(Bloc _bloc, {bool isPlus}) {
     return Expanded(
       flex: 5,
       child: GestureDetector(

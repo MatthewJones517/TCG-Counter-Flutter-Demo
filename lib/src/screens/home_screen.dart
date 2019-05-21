@@ -3,10 +3,8 @@ import '../widgets/player.dart';
 import '../blocs/provider.dart';
 
 class Home extends StatelessWidget {
-  Bloc _bloc;
-
   Widget build(context) {
-    _bloc = Provider.of(context);
+    Bloc _bloc = Provider.of(context);
 
     return Scaffold(
       drawer: Drawer(

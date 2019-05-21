@@ -29,7 +29,7 @@ class PrefsProvider {
   Future<int> getPlayerScore({int playerNum}) async {
     await prefsReady;
 
-    int score = await prefs.getInt('player' + playerNum.toString() + 'Score');
+    int score = prefs.getInt('player' + playerNum.toString() + 'Score');
     
     if (score != null) {
       return score;
@@ -46,9 +46,9 @@ class PrefsProvider {
   Future<int> getPlayerCtr({int playerNum}) async {
     await prefsReady;
 
-    int ctr = await prefs.getInt('player' + playerNum.toString() + 'ctr');
+    int ctr = prefs.getInt('player' + playerNum.toString() + 'ctr');
 
-    if (ctr != null && ctr != '') {
+    if (ctr != null) {
       return ctr;
     }
 
