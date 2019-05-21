@@ -7,15 +7,13 @@ import '../blocs/provider.dart';
 
 class SecondCounter extends StatelessWidget {
   final int playerNum;
+  final double widgetWidth;
 
-  SecondCounter({this.playerNum});
+  SecondCounter({@required this.playerNum, @required this.widgetWidth});
 
   Widget build(context) {
     // Access Bloc
     Bloc _bloc = Provider.of(context);
-
-    // Get screen width. We use this to size the counter
-    double screenWidth = MediaQuery.of(context).size.width;
 
     // Create widget
     return GestureDetector(
@@ -24,17 +22,17 @@ class SecondCounter extends StatelessWidget {
       },
       child: Center(
         child: Container(
-          width: screenWidth * .15,
-          height: screenWidth * .15,
-          margin: EdgeInsets.only(top: screenWidth * .50),
+          width: widgetWidth * .15,
+          height: widgetWidth * .15,
+          margin: EdgeInsets.only(top: widgetWidth * .50),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(screenWidth * .02)),
+            borderRadius: BorderRadius.all(Radius.circular(widgetWidth * .02)),
             color: (playerNum == 1) ? Colors.red[300] : Colors.blue[300],
           ),
           child: Stack(
             children: <Widget>[
-              secondaryCounterScore(context, _bloc, screenWidth),
-              altCtrDeactivatedOverlay(context, _bloc, screenWidth),
+              secondaryCounterScore(context, _bloc, widgetWidth),
+              altCtrDeactivatedOverlay(context, _bloc, widgetWidth),
             ],
           ),
         ),
@@ -42,7 +40,7 @@ class SecondCounter extends StatelessWidget {
     );
   }
 
-  Widget altCtrDeactivatedOverlay(BuildContext context, Bloc _bloc, double screenWidth) {
+  Widget altCtrDeactivatedOverlay(BuildContext context, Bloc _bloc, double widgetWidth) {
     return StreamBuilder(
       stream: _bloc.clickAreaStreams[_bloc.getAltCtrClickAreaStream(playerNum: playerNum)],
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -51,7 +49,7 @@ class SecondCounter extends StatelessWidget {
           return Container(
             decoration: BoxDecoration(
               borderRadius:
-                  BorderRadius.all(Radius.circular(screenWidth * .02)),
+                  BorderRadius.all(Radius.circular(widgetWidth * .02)),
               color: Color.fromARGB(75, 0, 0, 0),
             ),
           );
@@ -63,7 +61,7 @@ class SecondCounter extends StatelessWidget {
     );
   }
 
-  Widget secondaryCounterScore(BuildContext context, Bloc _bloc, double screenWidth) {
+  Widget secondaryCounterScore(BuildContext context, Bloc _bloc, double widgetWidth) {
     return StreamBuilder(
       stream: _bloc.getAltCtrScoreStream(playerNum: playerNum),
       builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
@@ -75,7 +73,7 @@ class SecondCounter extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: screenWidth * .085,
+              fontSize: widgetWidth * .085,
             ),
           ),],);
         }

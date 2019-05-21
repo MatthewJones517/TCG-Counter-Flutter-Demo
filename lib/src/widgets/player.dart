@@ -9,13 +9,21 @@ class Player extends StatelessWidget {
   // Widget properties
   final Color playerColor;
   final int playerNum;
+  final bool isPortrait;
 
-  Player({@required this.playerColor, @required this.playerNum});
+  Player({@required this.playerColor, @required this.playerNum, @required this.isPortrait});
 
   Widget build(context) {
     // Set up properties
     Bloc _bloc = Provider.of(context);
-    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Figure out player widget width. We have to divide the screen width in half if we're in landscape.
+    double widgetWidth;
+    if (isPortrait) {
+      widgetWidth = MediaQuery.of(context).size.width;
+    } else {
+      widgetWidth = MediaQuery.of(context).size.width / 2;
+    }
 
     // Return the actual player area. This is a stack made up of several elements.
     return Expanded(
@@ -25,7 +33,7 @@ class Player extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             // Player name and score
-            playerInfo(_bloc, screenWidth),
+            playerInfo(_bloc, widgetWidth),
             // Plus and minus indicators
             plusMinus(),
             // Activates when an area is tapped as UI feedback
@@ -35,6 +43,7 @@ class Player extends StatelessWidget {
             // Secondary Counter
             SecondCounter(
               playerNum: playerNum,
+              widgetWidth: widgetWidth,
             ),
           ],
         ),
@@ -43,36 +52,36 @@ class Player extends StatelessWidget {
   }
 
   // Display player title and current score
-  Widget playerInfo(Bloc _bloc, double screenWidth) {
+  Widget playerInfo(Bloc _bloc, double widgetWidth) {
     return Container(
       color: playerColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          playerTitle(screenWidth),
-          playerScore(_bloc, screenWidth),
+          playerTitle(widgetWidth),
+          playerScore(_bloc, widgetWidth),
         ],
       ),
     );
   }
 
-  Widget playerTitle(double screenWidth) {
+  Widget playerTitle(double widgetWidth) {
     return Padding(
-      padding: EdgeInsets.only(bottom: (screenWidth * .0025)),
+      padding: EdgeInsets.only(bottom: (widgetWidth * .0025)),
       child: Text(
         "Player ${playerNum.toString()}",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: screenWidth * .1,
+          fontSize: widgetWidth * .1,
           color: Colors.white,
         ),
       ),
     );
   }
 
-  Widget playerScore(Bloc _bloc, double screenWidth) {
+  Widget playerScore(Bloc _bloc, double widgetWidth) {
     // Get the appropriate stream
     String scoreStreamName = _bloc.getScoreStreamName(player: playerNum);
 
@@ -85,13 +94,13 @@ class Player extends StatelessWidget {
         }
 
         return Padding(
-          padding: EdgeInsets.only(bottom: screenWidth * .15),
+          padding: EdgeInsets.only(bottom: widgetWidth * .15),
           child: Text(
             snapshot.data.toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: screenWidth * .3,
+              fontSize: widgetWidth * .3,
               fontWeight: FontWeight.bold,
             ),
           ),

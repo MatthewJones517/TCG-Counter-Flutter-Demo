@@ -24,20 +24,45 @@ class Home extends StatelessWidget {
         ],
         backgroundColor: Colors.grey[800],
       ),
-      body: Column(
+      body: body(context),
+    );
+  }
+
+  Widget body(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    if (screenHeight > screenWidth) {
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Player(
+        children: players(
+          isPortrait: true,
+        ),
+      );
+    } else {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: players(
+          isPortrait: false,
+        ),
+      );
+    }
+  }
+
+  List<Widget> players({bool isPortrait}) {
+    return <Widget> [
+      Player(
             playerNum: 1,
             playerColor: Colors.red,
+            isPortrait: isPortrait,
           ),
           Player(
             playerNum: 2,
             playerColor: Colors.blue,
+            isPortrait: isPortrait,
           ),
-        ],
-      ),
-    );
+    ];
   }
 }
