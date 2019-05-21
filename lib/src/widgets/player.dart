@@ -74,11 +74,11 @@ class Player extends StatelessWidget {
 
   Widget playerScore(Bloc _bloc, double screenWidth) {
     // Get the appropriate stream
-    BehaviorSubject<int> scoreStream = _bloc.getScoreStream(player: playerNum);
+    String scoreStreamName = _bloc.getScoreStreamName(player: playerNum);
 
     // Return the score as a streambuilder
     return StreamBuilder(
-      stream: scoreStream.stream,
+      stream: _bloc.scoreStreams[scoreStreamName].stream,
       builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
         if (!snapshot.hasData) {
           return Container();
@@ -144,10 +144,10 @@ class Player extends StatelessWidget {
       children: <Widget>[
         tapAreaIndicator(
             stream:
-                _bloc.getClickAreaStream(addToScore: false, player: playerNum)),
+                _bloc.clickAreaStreams[_bloc.getClickAreaStream(addToScore: false, player: playerNum)]),
         tapAreaIndicator(
             stream:
-                _bloc.getClickAreaStream(addToScore: true, player: playerNum)),
+                _bloc.clickAreaStreams[_bloc.getClickAreaStream(addToScore: true, player: playerNum)]),
       ],
     );
   }

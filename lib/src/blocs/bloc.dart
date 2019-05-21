@@ -7,29 +7,11 @@ import 'package:rxdart/rxdart.dart';
 import '../resources/repository.dart';
 
 class Bloc {
-  // Streams
-  final BehaviorSubject<int> _player1Score = BehaviorSubject<int>();
-  final BehaviorSubject<int> _player2Score = BehaviorSubject<int>();
-  final BehaviorSubject<int> _player1AltCtr = BehaviorSubject<int>();
-  final BehaviorSubject<int> _player2AltCtr = BehaviorSubject<int>();
-  final BehaviorSubject<bool> _clickAreaP1Plus = BehaviorSubject<bool>();
-  final BehaviorSubject<bool> _clickAreaP1Minus = BehaviorSubject<bool>();
-  final BehaviorSubject<bool> _clickAreaP2Plus = BehaviorSubject<bool>();
-  final BehaviorSubject<bool> _clickAreaP2Minus = BehaviorSubject<bool>();
-  final BehaviorSubject<bool> _clickAreaP1AltCtr = BehaviorSubject<bool>();
-  final BehaviorSubject<bool> _clickAreaP2AltCtr = BehaviorSubject<bool>();
-
-  // Stream Getters
-  BehaviorSubject<int> get player1ScoreStream => _player1Score.stream;
-  BehaviorSubject<int> get player2ScoreStream => _player2Score.stream;
-  BehaviorSubject<int> get player1AltCtr => _player1AltCtr.stream;
-  BehaviorSubject<int> get player2AltCtr => _player2AltCtr.stream;
-  BehaviorSubject<bool> get clickAreaP1PlusStream => _clickAreaP1Plus.stream;
-  BehaviorSubject<bool> get clickAreaP1MinusStream => _clickAreaP1Minus.stream;
-  BehaviorSubject<bool> get clickAreaP2PlusStream => _clickAreaP2Plus.stream;
-  BehaviorSubject<bool> get clickAreaP2MinusStream => _clickAreaP2Minus.stream;
-  BehaviorSubject<bool> get clickAreaP1AltCtr => _clickAreaP1AltCtr.stream;
-  BehaviorSubject<bool> get clickAreaP2AltCtr => _clickAreaP2AltCtr.stream;
+  // We're putting the streams in maps to make them easier to access.
+  final Map<String, BehaviorSubject<int>> scoreStreams =
+      Map<String, BehaviorSubject<int>>();
+  final Map<String, BehaviorSubject<bool>> clickAreaStreams =
+      Map<String, BehaviorSubject<bool>>();
 
   // Timer used to autoincrement score as button is held down
   Timer _timer;
@@ -47,6 +29,18 @@ class Bloc {
   }
 
   void init() async {
+    // Set up streams
+    scoreStreams['player1Score'] = BehaviorSubject<int>();
+    scoreStreams['player2Score'] = BehaviorSubject<int>();
+    scoreStreams['player1AltCtr'] = BehaviorSubject<int>();
+    scoreStreams['player2AltCtr'] = BehaviorSubject<int>();
+    clickAreaStreams['clickAreaP1Plus'] = BehaviorSubject<bool>();
+    clickAreaStreams['clickAreaP1Minus'] = BehaviorSubject<bool>();
+    clickAreaStreams['clickAreaP2Plus'] = BehaviorSubject<bool>();
+    clickAreaStreams['clickAreaP2Minus'] = BehaviorSubject<bool>();
+    clickAreaStreams['clickAreaP1AltCtr'] = BehaviorSubject<bool>();
+    clickAreaStreams['clickAreaP2AltCtr'] = BehaviorSubject<bool>();
+
     // Set player scores to whatever value is saved in memory.
     int p1Score = await _repository.getScore(
       playerNum: 1,
@@ -64,26 +58,26 @@ class Bloc {
       playerNum: 2,
     );
 
-    _player1Score.sink.add(
-      (p1Score != null) ? p1Score : defaultScore,
-    );
-    _player2Score.sink.add(
-      (p2Score != null) ? p2Score : defaultScore,
-    );
+    scoreStreams['player1Score'].sink.add(
+          (p1Score != null) ? p1Score : defaultScore,
+        );
+    scoreStreams['player2Score'].sink.add(
+          (p2Score != null) ? p2Score : defaultScore,
+        );
 
     // Set secondary counters
-    _player1AltCtr.sink.add(p1Ctr);
-    _player2AltCtr.sink.add(p2Ctr);
+    scoreStreams['player1AltCtr'].sink.add(p1Ctr);
+    scoreStreams['player2AltCtr'].sink.add(p2Ctr);
   }
 
   void updateScore({int player, bool addToScore}) async {
     // Choose the stream we're updating.
-    BehaviorSubject<int> activeStream = getScoreStream(
+    String activeStreamName = getScoreStreamName(
       player: player,
     );
 
     // Update score accordingly
-    int value = activeStream.value;
+    int value = scoreStreams[activeStreamName].value;
     if (addToScore) {
       value++;
     } else {
@@ -91,7 +85,7 @@ class Bloc {
     }
 
     // Add new score to sink
-    activeStream.sink.add(value);
+    scoreStreams[activeStreamName].sink.add(value);
 
     // Update timer speed and call this method recursively
     _timer = new Timer(new Duration(milliseconds: _timerCurrentSpeed), () {
@@ -116,12 +110,12 @@ class Bloc {
 
   void resetScores() {
     // Reset Stream
-    _player1Score.sink.add(defaultScore);
-    _player2Score.sink.add(defaultScore);
-    _player1AltCtr.sink.add(0);
-    _player2AltCtr.sink.add(0);
-    _clickAreaP1AltCtr.add(false);
-    _clickAreaP2AltCtr.add(false);
+    scoreStreams['player1Score'].sink.add(defaultScore);
+    scoreStreams['player2Score'].sink.add(defaultScore);
+    scoreStreams['player1AltCtr'].sink.add(0);
+    scoreStreams['player2AltCtr'].sink.add(0);
+    clickAreaStreams['clickAreaP1AltCtr'].add(false);
+    clickAreaStreams['clickAreaP2AltCtr'].add(false);
 
     // Reset saved values
     _repository.saveScore(playerNum: 1, score: defaultScore);
@@ -130,19 +124,19 @@ class Bloc {
     _repository.saveCtr(playerNum: 2, ctr: 0);
   }
 
-  BehaviorSubject<int> getScoreStream({int player}) {
-    BehaviorSubject<int> activeStream;
+  String getScoreStreamName({int player}) {
+    String activeStream;
     if (player == 1) {
-      if (_clickAreaP1AltCtr.value != true) {
-        activeStream = _player1Score;
+      if (clickAreaStreams['clickAreaP1AltCtr'].value != true) {
+        activeStream = 'player1Score';
       } else {
-        activeStream = _player1AltCtr;
+        activeStream = 'player1AltCtr';
       }
     } else {
-      if (_clickAreaP2AltCtr.value != true) {
-        activeStream = _player2Score;
+      if (clickAreaStreams['clickAreaP2AltCtr'].value != true) {
+        activeStream = 'player2Score';
       } else {
-        activeStream = _player2AltCtr;
+        activeStream = 'player2AltCtr';
       }
     }
 
@@ -151,59 +145,60 @@ class Bloc {
 
   void handleTapDown({int player, bool addToScore}) {
     // Choose stream we're updating.
-    BehaviorSubject<bool> activeStream = getClickAreaStream(
+    String activeStreamName = getClickAreaStream(
       player: player,
       addToScore: addToScore,
     );
 
-    activeStream.sink.add(true);
+    clickAreaStreams[activeStreamName].sink.add(true);
   }
 
   void handleTapUp({int player, bool addToScore}) {
     // Choose stream we're updating.
-    BehaviorSubject<bool> activeStream = getClickAreaStream(
+    String activeStream = getClickAreaStream(
       player: player,
       addToScore: addToScore,
     );
 
     // Set current value to null
-    activeStream.sink.add(null);
+    clickAreaStreams[activeStream].sink.add(null);
 
     // Get the stream that has the current score
-    BehaviorSubject<int> scoreStream = getScoreStream(
+    String scoreStreamName = getScoreStreamName(
       player: player,
     );
 
-    if (scoreStream == _player1Score || scoreStream == _player2Score) {
+    if (scoreStreamName == 'player1Score' ||
+        scoreStreamName == 'player2Score') {
       // Save player score
       _repository.saveScore(
         playerNum: player,
-        score: scoreStream.value,
+        score: scoreStreams[scoreStreamName].value,
       );
     } else {
       // Save player counter
       _repository.saveCtr(
         playerNum: player,
-        ctr: scoreStream.value,
+        ctr: scoreStreams[scoreStreamName].value,
       );
     }
   }
 
-  BehaviorSubject<bool> getClickAreaStream({int player, bool addToScore}) {
+  String getClickAreaStream({int player, bool addToScore}) {
     // Choose the stream we're updating
-    BehaviorSubject<bool> activeStream;
+    String activeStream;
 
     if (player == 1) {
       if (addToScore) {
-        activeStream = _clickAreaP1Plus;
+        activeStream = 'clickAreaP1Plus';
       } else {
-        activeStream = _clickAreaP1Minus;
+        activeStream = 'clickAreaP1Minus';
       }
     } else {
       if (addToScore) {
-        activeStream = _clickAreaP2Plus;
+        activeStream = 'clickAreaP2Plus';
       } else {
-        activeStream = _clickAreaP2Minus;
+        activeStream = 'clickAreaP2Minus';
       }
     }
 
@@ -211,40 +206,42 @@ class Bloc {
   }
 
   void toggleAltCtr({int playerNum}) {
-    BehaviorSubject<bool> activeStream =
+    String activeStreamName =
         getAltCtrClickAreaStream(playerNum: playerNum);
 
-    if (activeStream.value == null) {
-      activeStream.sink.add(true);
+    if (clickAreaStreams[activeStreamName].value == null) {
+      clickAreaStreams[activeStreamName].sink.add(true);
     } else {
-      activeStream.sink.add(!activeStream.value);
+      clickAreaStreams[activeStreamName].sink.add(!clickAreaStreams[activeStreamName].value);
     }
   }
 
-  BehaviorSubject<bool> getAltCtrClickAreaStream({int playerNum}) {
+  String getAltCtrClickAreaStream({int playerNum}) {
     if (playerNum == 1) {
-      return _clickAreaP1AltCtr;
+      return 'clickAreaP1AltCtr';
     }
 
-    return _clickAreaP2AltCtr;
+    return 'clickAreaP2AltCtr';
   }
 
   BehaviorSubject<int> getAltCtrScoreStream({int playerNum}) {
     if (playerNum == 1) {
-      return _player1AltCtr;
+      return scoreStreams['player1AltCtr'];
     } else {
-      return _player2AltCtr;
+      return scoreStreams['player2AltCtr'];
     }
   }
 
   void dispose() {
-    _player1Score.close();
-    _player2Score.close();
-    _clickAreaP1Plus.close();
-    _clickAreaP1Minus.close();
-    _clickAreaP2Plus.close();
-    _clickAreaP2Minus.close();
-    _player1AltCtr.close();
-    _player2AltCtr.close();
+    scoreStreams['player1Score'].close();
+    scoreStreams['player2Score'].close();
+    clickAreaStreams['clickAreaP1Plus'].close();
+    clickAreaStreams['clickAreaP1Minus'].close();
+    clickAreaStreams['clickAreaP2Plus'].close();
+    clickAreaStreams['clickAreaP2Minus'].close();
+    scoreStreams['player1AltCtr'].close();
+    scoreStreams['player2AltCtr'].close();
+    clickAreaStreams['clickAreaP1AltCtr'].close();
+    clickAreaStreams['clickAreaP2AltCtr'].close();
   }
 }

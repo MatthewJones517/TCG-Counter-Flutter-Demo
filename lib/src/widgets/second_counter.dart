@@ -44,7 +44,7 @@ class SecondCounter extends StatelessWidget {
 
   Widget altCtrDeactivatedOverlay(BuildContext context, Bloc _bloc, double screenWidth) {
     return StreamBuilder(
-      stream: _bloc.getAltCtrClickAreaStream(playerNum: playerNum),
+      stream: _bloc.clickAreaStreams[_bloc.getAltCtrClickAreaStream(playerNum: playerNum)],
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         // Deactivate clickarea
         if (!snapshot.hasData || snapshot.data == false) {
