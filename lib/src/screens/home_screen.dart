@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import '../widgets/player.dart';
 import '../blocs/provider.dart';
+import '../widgets/menu_drawer.dart';
+import '../widgets/player.dart';
 
 class Home extends StatelessWidget {
   Widget build(context) {
     Bloc _bloc = Provider.of(context);
 
     return Scaffold(
-      drawer: Drawer(
-        child:Container(
-          color: Colors.grey[900],
-        )
-      ),
+      drawer: MenuDrawer(),
       appBar: AppBar(
         title: Text('TCG Counter'),
         actions: <Widget>[
