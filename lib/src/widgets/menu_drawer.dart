@@ -39,16 +39,16 @@ class MenuDrawer extends StatelessWidget {
     );
   }
 
-  Widget menuItem(BuildContext context, {String title, String route, Bloc bloc}) {
+  Widget menuItem(BuildContext context,
+      {String title, String route, Bloc bloc}) {
     return GestureDetector(
       onTap: () {
+        // Close menu
+        Navigator.of(context).pop();
+
         if (route == '/reset') {
           // Reset all counters
           bloc.resetScores();
-
-          // Close menu
-          Navigator.of(context).pop();
-          
         } else {
           Navigator.pushNamed(context, route);
         }
