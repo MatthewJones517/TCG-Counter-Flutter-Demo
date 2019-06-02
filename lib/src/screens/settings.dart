@@ -26,22 +26,22 @@ class Settings extends StatelessWidget {
         ),
         ListView(
           children: <Widget>[
-            defaultScoreTitle(),
+            settingsHeading('DEFAULT SCORE'),
             defaultScoreTextfield(_bloc),
-            Text('Secondary Counters'),
-            Text('Mirror Players'),
-            Text('Player Colors'),
+            settingsHeading('Secondary Counters'),
+            settingsHeading('Mirror Players'),
+            settingsHeading('Player Colors'),
           ],
         ),
       ],
     );
   }
 
-  Widget defaultScoreTitle() {
+  Widget settingsHeading(String title) {
     return Container(
-      padding: EdgeInsets.only(bottom: 10, top: 10),
+      padding: EdgeInsets.only(bottom: 10, top: 15),
       child: Text(
-        'DEFAULT SCORE',
+        title,
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
