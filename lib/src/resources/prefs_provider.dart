@@ -54,4 +54,17 @@ class PrefsProvider {
 
     return 0;
   }
+
+  void saveDefaultScore(int defaultScore) async {
+    await prefsReady;
+    prefs.setInt('defaultscore', defaultScore);
+  }
+
+  Future<int> getDefaultScore() async {
+    await prefsReady;
+
+    int defaultScore = prefs.getInt('defaultscore');
+
+    return (defaultScore != null) ? defaultScore : 20;
+  }
 }

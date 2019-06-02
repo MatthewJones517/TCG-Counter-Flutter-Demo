@@ -22,7 +22,7 @@ class Bloc {
   Repository _repository = Repository();
 
   // Settings
-  int defaultScore = 20;
+  int defaultScore;
 
   Bloc() {
     init();
@@ -40,6 +40,9 @@ class Bloc {
     clickAreaStreams['clickAreaP2Minus'] = BehaviorSubject<bool>();
     clickAreaStreams['clickAreaP1AltCtr'] = BehaviorSubject<bool>();
     clickAreaStreams['clickAreaP2AltCtr'] = BehaviorSubject<bool>();
+
+    // Get default score
+    defaultScore =  await _repository.getDefaultScore();
 
     // Set player scores to whatever value is saved in memory.
     int p1Score = await _repository.getScore(
@@ -230,6 +233,11 @@ class Bloc {
     } else {
       return scoreStreams['player2AltCtr'];
     }
+  }
+
+  void updateDefaultScore(int newDefault) {
+    _repository.saveDefaultScore(newDefault);
+    defaultScore = newDefault;
   }
 
   void dispose() {

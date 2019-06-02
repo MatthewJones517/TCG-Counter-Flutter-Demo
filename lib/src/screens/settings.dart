@@ -79,6 +79,9 @@ class Settings extends StatelessWidget {
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
+          onChanged: (newDefault) {
+            _bloc.updateDefaultScore(int.parse(newDefault));
+          },
         ),
       ),
     );

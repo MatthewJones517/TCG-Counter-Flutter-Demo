@@ -32,4 +32,12 @@ class Repository {
       playerNum: playerNum,
     );
   }
+
+  void saveDefaultScore(int defaultScore) {
+    _prefsProvider.saveDefaultScore(defaultScore);
+  }
+
+  Future<int> getDefaultScore() {
+    return _prefsProvider.getDefaultScore();
+  }
 }
