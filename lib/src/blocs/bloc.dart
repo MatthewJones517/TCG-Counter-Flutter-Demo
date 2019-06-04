@@ -15,6 +15,7 @@ class Bloc {
 
   // Streams for other settings
   final BehaviorSubject<bool> secondaryCountersActive = BehaviorSubject<bool>();
+  Function(bool) get updateSecondaryCountersActive => secondaryCountersActive.sink.add;
 
   // Timer used to autoincrement score as button is held down
   Timer _timer;

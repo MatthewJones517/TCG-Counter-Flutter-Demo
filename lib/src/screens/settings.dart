@@ -29,6 +29,7 @@ class Settings extends StatelessWidget {
             settingsHeading('DEFAULT SCORE'),
             defaultScoreTextfield(_bloc),
             settingsHeading('Secondary Counters'),
+            secondaryCounterSwitch(_bloc),
             settingsHeading('Mirror Players'),
             settingsHeading('Player Colors'),
           ],
@@ -84,6 +85,26 @@ class Settings extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Widget secondaryCounterSwitch(Bloc _bloc) {
+    return StreamBuilder(
+      stream: _bloc.secondaryCountersActive,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        return Align(
+          alignment: Alignment.center,
+          child: Container(
+            width: 75,
+            child: Switch(
+              value: (snapshot.data != null) ? snapshot.data : false,
+              onChanged: _bloc.updateSecondaryCountersActive,
+              activeColor: Colors.blue,
+              inactiveTrackColor: Colors.blueGrey,
+            ),
+          ),
+        );
+      },
     );
   }
 }
