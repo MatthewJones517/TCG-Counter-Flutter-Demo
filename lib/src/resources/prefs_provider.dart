@@ -67,4 +67,14 @@ class PrefsProvider {
 
     return (defaultScore != null) ? defaultScore : 20;
   }
+
+  void updateSecondaryCounterStatus(bool countersOn) async {
+    await prefsReady;
+    prefs.setBool('secondaryCounters', countersOn);
+  }
+
+  Future<bool> getSecondaryCounterStatus() async {
+    await prefsReady;
+    return prefs.getBool('secondaryCounters');
+  }
 }

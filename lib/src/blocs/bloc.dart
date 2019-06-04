@@ -7,11 +7,14 @@ import 'package:rxdart/rxdart.dart';
 import '../resources/repository.dart';
 
 class Bloc {
-  // We're putting the streams in maps to make them easier to access.
+  // We're putting these streams in maps to make them easier to access.
   final Map<String, BehaviorSubject<int>> scoreStreams =
       Map<String, BehaviorSubject<int>>();
   final Map<String, BehaviorSubject<bool>> clickAreaStreams =
       Map<String, BehaviorSubject<bool>>();
+
+  // Streams for other settings
+  final BehaviorSubject<bool> secondaryCountersActive = BehaviorSubject<bool>();
 
   // Timer used to autoincrement score as button is held down
   Timer _timer;
@@ -67,6 +70,9 @@ class Bloc {
     scoreStreams['player2Score'].sink.add(
           (p2Score != null) ? p2Score : defaultScore,
         );
+
+    // Set up secondary counters
+    secondaryCountersActive.sink.add(await _repository.getSecondaryCounterStatus());
 
     // Set secondary counters
     scoreStreams['player1AltCtr'].sink.add(p1Ctr);
@@ -251,5 +257,6 @@ class Bloc {
     scoreStreams['player2AltCtr'].close();
     clickAreaStreams['clickAreaP1AltCtr'].close();
     clickAreaStreams['clickAreaP2AltCtr'].close();
+    secondaryCountersActive.close();
   }
 }

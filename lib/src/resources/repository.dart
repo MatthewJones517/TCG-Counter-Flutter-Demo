@@ -40,4 +40,15 @@ class Repository {
   Future<int> getDefaultScore() {
     return _prefsProvider.getDefaultScore();
   }
+
+  Future<bool> getSecondaryCounterStatus() async {
+    bool status = await _prefsProvider.getSecondaryCounterStatus();
+
+    // Counters are off by default.
+    return (status != null) ? status : false;
+  }
+
+  void updateSecondaryCounterStatus(bool countersOn) {
+    _prefsProvider.updateSecondaryCounterStatus(countersOn);
+  }
 }
