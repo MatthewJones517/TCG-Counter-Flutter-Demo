@@ -103,7 +103,8 @@ class Player extends StatelessWidget {
         }
 
         return Padding(
-          padding: EdgeInsets.only(bottom: widgetWidth * .15),
+          // Add padding to bottom if secondary counters are active. 
+          padding: (_bloc.secondaryCountersActive.value == true) ? EdgeInsets.only(bottom: widgetWidth * .15) : EdgeInsets.only(bottom: 0),
           child: Text(
             snapshot.data.toString(),
             textAlign: TextAlign.center,
