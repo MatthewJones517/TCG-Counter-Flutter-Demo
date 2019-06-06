@@ -51,4 +51,14 @@ class Repository {
   void updateSecondaryCounterStatus(bool countersOn) {
     _prefsProvider.updateSecondaryCounterStatus(countersOn);
   }
+
+  // Defaults to on
+  Future<bool> getMirrorPlayerStatus() async {
+    bool status = await _prefsProvider.getSecondaryCounterStatus();
+    return (status != null) ? status : true;
+  }
+
+  void updateMirrorPlayerStatus(bool mirrorPlayer) {
+    _prefsProvider.updateMirrorPlayerStatus(mirrorPlayer);
+  }
 }
