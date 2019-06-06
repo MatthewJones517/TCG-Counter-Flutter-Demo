@@ -79,6 +79,9 @@ class Bloc {
     secondaryCountersActive.sink
         .add(await _repository.getSecondaryCounterStatus());
 
+    // Set up mirror player status
+    mirrorPlayers.sink.add(await _repository.getMirrorPlayerStatus());
+
     // Set secondary counters
     scoreStreams['player1AltCtr'].sink.add(p1Ctr);
     scoreStreams['player2AltCtr'].sink.add(p2Ctr);
