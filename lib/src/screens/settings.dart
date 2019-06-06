@@ -26,12 +26,13 @@ class Settings extends StatelessWidget {
         ),
         ListView(
           children: <Widget>[
-            settingsHeading('DEFAULT SCORE'),
+            settingsHeading('Default Score:'),
             defaultScoreTextfield(_bloc),
-            settingsHeading('Secondary Counters'),
+            settingsHeading('Secondary Counters:'),
             secondaryCounterSwitch(_bloc),
-            settingsHeading('Mirror Players'),
-            settingsHeading('Player Colors'),
+            settingsHeading('Mirror Players:'),
+            settingsHeading('Player1 Theme:'),
+            settingsHeading('Player2 Theme:'),
           ],
         ),
       ],
