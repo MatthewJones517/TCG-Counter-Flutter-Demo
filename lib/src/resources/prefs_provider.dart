@@ -77,4 +77,13 @@ class PrefsProvider {
     await prefsReady;
     return prefs.getBool('secondaryCounters');
   }
+
+  void updateMirrorPlayerStatus(bool mirrorPlayers) async {
+    await prefsReady;
+    prefs.setBool('mirrorPlayers', mirrorPlayers);
+  }
+
+  Future<bool> getMirrorPlayerStatus() async {
+    return prefs.getBool('mirrorPlayers');
+  }
 }
