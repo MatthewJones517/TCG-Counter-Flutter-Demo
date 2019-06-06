@@ -15,7 +15,10 @@ class Bloc {
 
   // Streams for other settings
   final BehaviorSubject<bool> secondaryCountersActive = BehaviorSubject<bool>();
-  Function(bool) get updateSecondaryCountersActive => secondaryCountersActive.sink.add;
+  final BehaviorSubject<bool> mirrorPlayers = BehaviorSubject<bool>();
+  Function(bool) get updateSecondaryCountersActive =>
+      secondaryCountersActive.sink.add;
+  Function(bool) get mirrorPlayersToggle => mirrorPlayers.sink.add;
 
   // Timer used to autoincrement score as button is held down
   Timer _timer;
@@ -46,7 +49,7 @@ class Bloc {
     clickAreaStreams['clickAreaP2AltCtr'] = BehaviorSubject<bool>();
 
     // Get default score
-    defaultScore =  await _repository.getDefaultScore();
+    defaultScore = await _repository.getDefaultScore();
 
     // Set player scores to whatever value is saved in memory.
     int p1Score = await _repository.getScore(
@@ -73,7 +76,8 @@ class Bloc {
         );
 
     // Set up secondary counters
-    secondaryCountersActive.sink.add(await _repository.getSecondaryCounterStatus());
+    secondaryCountersActive.sink
+        .add(await _repository.getSecondaryCounterStatus());
 
     // Set secondary counters
     scoreStreams['player1AltCtr'].sink.add(p1Ctr);
@@ -216,13 +220,14 @@ class Bloc {
   }
 
   void toggleAltCtr({int playerNum}) {
-    String activeStreamName =
-        getAltCtrClickAreaStream(playerNum: playerNum);
+    String activeStreamName = getAltCtrClickAreaStream(playerNum: playerNum);
 
     if (clickAreaStreams[activeStreamName].value == null) {
       clickAreaStreams[activeStreamName].sink.add(true);
     } else {
-      clickAreaStreams[activeStreamName].sink.add(!clickAreaStreams[activeStreamName].value);
+      clickAreaStreams[activeStreamName]
+          .sink
+          .add(!clickAreaStreams[activeStreamName].value);
     }
   }
 
@@ -250,14 +255,15 @@ class Bloc {
   void dispose() {
     scoreStreams['player1Score'].close();
     scoreStreams['player2Score'].close();
+    scoreStreams['player1AltCtr'].close();
+    scoreStreams['player2AltCtr'].close();
     clickAreaStreams['clickAreaP1Plus'].close();
     clickAreaStreams['clickAreaP1Minus'].close();
     clickAreaStreams['clickAreaP2Plus'].close();
     clickAreaStreams['clickAreaP2Minus'].close();
-    scoreStreams['player1AltCtr'].close();
-    scoreStreams['player2AltCtr'].close();
     clickAreaStreams['clickAreaP1AltCtr'].close();
     clickAreaStreams['clickAreaP2AltCtr'].close();
     secondaryCountersActive.close();
+    mirrorPlayers.close();
   }
 }
