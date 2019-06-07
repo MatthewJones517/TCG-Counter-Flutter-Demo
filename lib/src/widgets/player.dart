@@ -43,7 +43,7 @@ class Player extends StatelessWidget {
           child: Container(
             color: playerColor,
             child: Transform.rotate(
-              angle: (playerNum == 1) ? math.pi : 0,
+              angle: (playerNum == 1 && settingsSnapshot.data['mirrorPlayers'] == true) ? math.pi : 0,
               child: SafeArea(
                 left: true,
                 right: true,
