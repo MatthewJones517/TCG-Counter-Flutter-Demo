@@ -74,7 +74,13 @@ class Repository {
   }
 
   Future<String> _getPlayerTheme(int playerNum) async {
-    return _prefsProvider.getPlayerTheme(playerNum);
+    String theme = await _prefsProvider.getPlayerTheme(playerNum);
+
+    if (theme == null) {
+      return (playerNum == 1) ? 'red' : 'blue';
+    }
+
+    return theme;
   }
 
   void updateSettings({int defaultScore, bool mirrorPlayers, bool secondaryCounters}) {
