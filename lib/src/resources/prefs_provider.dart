@@ -5,7 +5,7 @@ class PrefsProvider {
   Future prefsReady;
 
   PrefsProvider() {
-    // We can't make a constructor async, so we call an init method. 
+    // We can't make a constructor async, so we call an init method.
     prefsReady = init();
   }
 
@@ -30,7 +30,7 @@ class PrefsProvider {
     await prefsReady;
 
     int score = prefs.getInt('player' + playerNum.toString() + 'Score');
-    
+
     if (score != null) {
       return score;
     }
@@ -85,5 +85,23 @@ class PrefsProvider {
 
   Future<bool> getMirrorPlayerStatus() async {
     return prefs.getBool('mirrorPlayers');
+  }
+
+  void _updatePlayerTheme(int playerNum, String theme) async {
+    await prefsReady;
+    prefs.setString("player${playerNum}Theme", theme);
+  }
+
+  Future<String> getPlayerTheme(int playerNum) async {
+    await prefsReady;
+    return prefs.getString("player${playerNum}Theme");
+  }
+
+  void updatePlayer1Theme(String theme) {
+    _updatePlayerTheme(1, theme);
+  }
+
+  void updatePlayer2Theme(String theme) {
+    _updatePlayerTheme(2, theme);
   }
 }
