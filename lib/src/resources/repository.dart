@@ -33,32 +33,55 @@ class Repository {
     );
   }
 
-  void saveDefaultScore(int defaultScore) {
+  void _saveDefaultScore(int defaultScore) {
     _prefsProvider.saveDefaultScore(defaultScore);
   }
 
-  Future<int> getDefaultScore() {
+  Future<int> _getDefaultScore() {
     return _prefsProvider.getDefaultScore();
   }
 
-  Future<bool> getSecondaryCounterStatus() async {
+  Future<bool> _getSecondaryCounterStatus() async {
     bool status = await _prefsProvider.getSecondaryCounterStatus();
 
     // Counters are off by default.
     return (status != null) ? status : false;
   }
 
-  void updateSecondaryCounterStatus(bool countersOn) {
+  void _updateSecondaryCounterStatus(bool countersOn) {
     _prefsProvider.updateSecondaryCounterStatus(countersOn);
   }
 
   // Defaults to on
-  Future<bool> getMirrorPlayerStatus() async {
-    bool status = await _prefsProvider.getSecondaryCounterStatus();
+  Future<bool> _getMirrorPlayerStatus() async {
+    
+    bool status = await _prefsProvider.getMirrorPlayerStatus();
     return (status != null) ? status : true;
   }
 
-  void updateMirrorPlayerStatus(bool mirrorPlayer) {
+  void _updateMirrorPlayerStatus(bool mirrorPlayer) {
     _prefsProvider.updateMirrorPlayerStatus(mirrorPlayer);
+  }
+
+  Future<Map<String, dynamic>> getSettings() async {
+    return {
+      "defaultScore": await _getDefaultScore(),
+      "mirrorPlayers": await _getMirrorPlayerStatus(),
+      "secondaryCounters": await _getSecondaryCounterStatus(),
+    };
+  }
+
+  void updateSettings({int defaultScore, bool mirrorPlayers, bool secondaryCounters}) {
+    if (defaultScore != null) {
+      _saveDefaultScore(defaultScore);
+    }
+
+    if (mirrorPlayers != null) {
+      _updateMirrorPlayerStatus(mirrorPlayers);
+    } 
+
+    if (secondaryCounters!= null) {
+      _updateSecondaryCounterStatus(secondaryCounters);
+    }
   }
 }

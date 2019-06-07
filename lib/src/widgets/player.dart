@@ -28,49 +28,63 @@ class Player extends StatelessWidget {
       widgetWidth = MediaQuery.of(context).size.width / 2;
     }
 
-    // Return the actual player area. This is a stack made up of several elements.
-    return Expanded(
-      flex: 5,
-      child: Container(
-        color: playerColor,
-        child: Transform.rotate(
-          angle: ((_bloc.mirrorPlayers.value == true || _bloc.mirrorPlayers.value == null) && playerNum == 1) ? math.pi : 0,
-          child: SafeArea(
-            left: true,
-            right: true,
-            top: false,
-            bottom: false,
-            child: Stack(
-              children: <Widget>[
-                // Player name and score
-                playerInfo(_bloc, widgetWidth),
-                // Plus and minus indicators
-                plusMinus(),
-                // Activates when an area is tapped as UI feedback
-                tapIndicators(_bloc),
-                // Catches user taps
-                tapAreas(_bloc),
-                // Secondary Counter
-                SecondCounter(
-                  playerNum: playerNum,
-                  widgetWidth: widgetWidth,
+    return StreamBuilder(
+      stream: _bloc.settings,
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, dynamic>> settingsSnapshot) {
+        if (!settingsSnapshot.hasData) {
+          return Container(
+            color: Colors.black,
+          );
+        }
+
+        return Expanded(
+          flex: 5,
+          child: Container(
+            color: playerColor,
+            child: Transform.rotate(
+              angle: (playerNum == 1) ? math.pi : 0,
+              child: SafeArea(
+                left: true,
+                right: true,
+                top: false,
+                bottom: false,
+                child: Stack(
+                  children: <Widget>[
+                    // Player name and score
+                    playerInfo(_bloc, widgetWidth, settingsSnapshot.data),
+                    // Plus and minus indicators
+                    plusMinus(),
+                    // Activates when an area is tapped as UI feedback
+                    tapIndicators(_bloc),
+                    // Catches user taps
+                    tapAreas(_bloc),
+                    // Secondary Counter
+                    (settingsSnapshot.data['secondaryCounters'] == true)
+                        ? SecondCounter(
+                            playerNum: playerNum,
+                            widgetWidth: widgetWidth,
+                          )
+                        : Container(),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
+    // Return the actual player area. This is a stack made up of several elements.
   }
 
   // Display player title and current score
-  Widget playerInfo(Bloc _bloc, double widgetWidth) {
+  Widget playerInfo(Bloc _bloc, double widgetWidth, Map<String, dynamic> settingsSnapshot) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         playerTitle(widgetWidth),
-        playerScore(_bloc, widgetWidth),
+        playerScore(_bloc, widgetWidth, settingsSnapshot),
       ],
     );
   }
@@ -90,7 +104,7 @@ class Player extends StatelessWidget {
     );
   }
 
-  Widget playerScore(Bloc _bloc, double widgetWidth) {
+  Widget playerScore(Bloc _bloc, double widgetWidth, Map<String, dynamic> settingsSnapshot) {
     // Get the appropriate stream
     String scoreStreamName = _bloc.getScoreStreamName(player: playerNum);
 
@@ -103,8 +117,10 @@ class Player extends StatelessWidget {
         }
 
         return Padding(
-          // Add padding to bottom if secondary counters are active. 
-          padding: (_bloc.secondaryCountersActive.value == true) ? EdgeInsets.only(bottom: widgetWidth * .15) : EdgeInsets.only(bottom: 0),
+          // Add padding to bottom if secondary counters are active.
+          padding: (settingsSnapshot['secondaryCounters'] == true)
+              ? EdgeInsets.only(bottom: widgetWidth * .15)
+              : EdgeInsets.only(bottom: 0),
           child: Text(
             snapshot.data.toString(),
             textAlign: TextAlign.center,

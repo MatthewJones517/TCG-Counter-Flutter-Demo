@@ -15,44 +15,27 @@ class SecondCounter extends StatelessWidget {
     // Access Bloc
     Bloc _bloc = Provider.of(context);
 
-    return StreamBuilder(
-      stream: _bloc.secondaryCountersActive,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        // if we don't have anything, return an empty container
-        if (!snapshot.hasData) {
-          return Container();
-        }
-
-        // If the counters are turned off, show nothing
-        if (snapshot.data == false) {
-          return Container();
-        }
-
-        // Otherwise show the counters
-        return GestureDetector(
-          onTap: () {
-            _bloc.toggleAltCtr(playerNum: playerNum);
-          },
-          child: Center(
-            child: Container(
-              width: widgetWidth * .15,
-              height: widgetWidth * .15,
-              margin: EdgeInsets.only(top: widgetWidth * .50),
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.all(Radius.circular(widgetWidth * .02)),
-                color: (playerNum == 1) ? Colors.red[300] : Colors.blue[300],
-              ),
-              child: Stack(
-                children: <Widget>[
-                  secondaryCounterScore(context, _bloc, widgetWidth),
-                  altCtrDeactivatedOverlay(context, _bloc, widgetWidth),
-                ],
-              ),
-            ),
-          ),
-        );
+    return GestureDetector(
+      onTap: () {
+        _bloc.toggleAltCtr(playerNum: playerNum);
       },
+      child: Center(
+        child: Container(
+          width: widgetWidth * .15,
+          height: widgetWidth * .15,
+          margin: EdgeInsets.only(top: widgetWidth * .50),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(widgetWidth * .02)),
+            color: (playerNum == 1) ? Colors.red[300] : Colors.blue[300],
+          ),
+          child: Stack(
+            children: <Widget>[
+              secondaryCounterScore(context, _bloc, widgetWidth),
+              altCtrDeactivatedOverlay(context, _bloc, widgetWidth),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

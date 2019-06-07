@@ -18,24 +18,35 @@ class Settings extends StatelessWidget {
   }
 
   Widget body(BuildContext context, Bloc _bloc) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: <Widget>[
-        Container(
-          color: Colors.grey[900],
-        ),
-        ListView(
+    return StreamBuilder(
+      stream: _bloc.settings,
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+
+        return Stack(
+          alignment: Alignment.topCenter,
           children: <Widget>[
-            settingsHeading('Default Score:'),
-            defaultScoreTextfield(_bloc),
-            settingsHeading('Secondary Counters:'),
-            secondaryCounterSwitch(_bloc),
-            settingsHeading('Mirror Players:'),
-            settingsHeading('Player1 Theme:'),
-            settingsHeading('Player2 Theme:'),
+            Container(
+              color: Colors.grey[900],
+            ),
+            ListView(
+              children: <Widget>[
+                settingsHeading('Default Score:'),
+                defaultScoreTextfield(_bloc),
+                settingsHeading('Secondary Counters:'),
+                secondaryCounterSwitch(_bloc, snapshot.data),
+                settingsHeading('Mirror Players:'),
+                mirrorPlayersSwitch(_bloc, snapshot.data),
+                settingsHeading('Player1 Theme:'),
+                settingsHeading('Player2 Theme:'),
+              ],
+            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -82,30 +93,50 @@ class Settings extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           onChanged: (newDefault) {
-            _bloc.updateDefaultScore(int.parse(newDefault));
+            _bloc.updateSettings(
+              newDefaultScore: int.parse(newDefault),
+            );
           },
         ),
       ),
     );
   }
 
-  Widget secondaryCounterSwitch(Bloc _bloc) {
-    return StreamBuilder(
-      stream: _bloc.secondaryCountersActive,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        return Align(
-          alignment: Alignment.center,
-          child: Container(
-            width: 75,
-            child: Switch(
-              value: (snapshot.data != null) ? snapshot.data : false,
-              onChanged: _bloc.updateSecondaryCountersActive,
-              activeColor: Colors.blue,
-              inactiveTrackColor: Colors.blueGrey,
-            ),
-          ),
-        );
-      },
+  Widget secondaryCounterSwitch(Bloc _bloc, Map<String, dynamic> snapshot) {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        width: 75,
+        child: Switch(
+          onChanged: (bool newValue) {
+            _bloc.updateSettings(
+              secondaryCounters: newValue
+            );
+          },
+          value: snapshot['secondaryCounters'],
+          activeColor: Colors.blue,
+          inactiveTrackColor: Colors.blueGrey,
+        ),
+      ),
+    );
+  }
+
+  Widget mirrorPlayersSwitch(Bloc _bloc, Map<String, dynamic> snapshot) {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        width: 75,
+        child: Switch(
+          onChanged: (bool newValue) {
+            _bloc.updateSettings(
+              mirrorPlayers: newValue,
+            );
+          },
+          value: snapshot['mirrorPlayers'],
+          activeColor: Colors.blue,
+          inactiveTrackColor: Colors.blueGrey,
+        ),
+      ),
     );
   }
 }

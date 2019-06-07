@@ -14,11 +14,9 @@ class Bloc {
       Map<String, BehaviorSubject<bool>>();
 
   // Streams for other settings
-  final BehaviorSubject<bool> secondaryCountersActive = BehaviorSubject<bool>();
-  final BehaviorSubject<bool> mirrorPlayers = BehaviorSubject<bool>();
-  Function(bool) get updateSecondaryCountersActive =>
-      secondaryCountersActive.sink.add;
-  Function(bool) get mirrorPlayersToggle => mirrorPlayers.sink.add;
+  final BehaviorSubject<Map<String, dynamic>> _settings =
+      BehaviorSubject<Map<String, dynamic>>();
+  BehaviorSubject<Map<String, dynamic>> get settings => _settings.stream;
 
   // Timer used to autoincrement score as button is held down
   Timer _timer;
@@ -48,8 +46,11 @@ class Bloc {
     clickAreaStreams['clickAreaP1AltCtr'] = BehaviorSubject<bool>();
     clickAreaStreams['clickAreaP2AltCtr'] = BehaviorSubject<bool>();
 
+    // Get settings and add them to the stream
+    _settings.sink.add(await _repository.getSettings());
+
     // Get default score
-    defaultScore = await _repository.getDefaultScore();
+    defaultScore = _settings.value['defaultScore'];
 
     // Set player scores to whatever value is saved in memory.
     int p1Score = await _repository.getScore(
@@ -74,13 +75,6 @@ class Bloc {
     scoreStreams['player2Score'].sink.add(
           (p2Score != null) ? p2Score : defaultScore,
         );
-
-    // Set up secondary counters
-    secondaryCountersActive.sink
-        .add(await _repository.getSecondaryCounterStatus());
-
-    // Set up mirror player status
-    mirrorPlayers.sink.add(await _repository.getMirrorPlayerStatus());
 
     // Set secondary counters
     scoreStreams['player1AltCtr'].sink.add(p1Ctr);
@@ -250,9 +244,26 @@ class Bloc {
     }
   }
 
-  void updateDefaultScore(int newDefault) {
-    _repository.saveDefaultScore(newDefault);
-    defaultScore = newDefault;
+  void updateSettings(
+      {int newDefaultScore, bool mirrorPlayers, bool secondaryCounters}) {
+    _repository.updateSettings(
+      defaultScore: newDefaultScore,
+      mirrorPlayers: mirrorPlayers,
+      secondaryCounters: secondaryCounters,
+    );
+
+    if (defaultScore != null) {
+      defaultScore = newDefaultScore;
+    }
+
+    _settings.sink.add(
+      {
+        "defaultScore": (newDefaultScore != null) ? newDefaultScore : _settings.value['defaultScore'],
+        "mirrorPlayers": (mirrorPlayers != null) ? mirrorPlayers : _settings.value['mirrorPlayers'],
+        "secondaryCounters": (secondaryCounters != null) ? secondaryCounters : _settings.value['secondaryCounters'],
+      }
+
+    );
   }
 
   void dispose() {
@@ -266,7 +277,6 @@ class Bloc {
     clickAreaStreams['clickAreaP2Minus'].close();
     clickAreaStreams['clickAreaP1AltCtr'].close();
     clickAreaStreams['clickAreaP2AltCtr'].close();
-    secondaryCountersActive.close();
-    mirrorPlayers.close();
+    _settings.close();
   }
 }
