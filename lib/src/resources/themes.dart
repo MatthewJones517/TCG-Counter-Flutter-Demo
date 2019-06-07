@@ -33,6 +33,7 @@ class Themes {
   };
 
   Map<String, Color> choose(String color) {
+
     color = color.toLowerCase();
 
     switch (color) {

@@ -8,8 +8,9 @@ import '../blocs/provider.dart';
 class SecondCounter extends StatelessWidget {
   final int playerNum;
   final double widgetWidth;
+  final Map<String, Color> colorTheme;
 
-  SecondCounter({@required this.playerNum, @required this.widgetWidth});
+  SecondCounter({@required this.playerNum, @required this.widgetWidth, @required this.colorTheme});
 
   Widget build(context) {
     // Access Bloc
@@ -26,7 +27,7 @@ class SecondCounter extends StatelessWidget {
           margin: EdgeInsets.only(top: widgetWidth * .50),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(widgetWidth * .02)),
-            color: (playerNum == 1) ? Colors.red[300] : Colors.blue[300],
+            color: colorTheme['secondaryCounterColor'],
           ),
           child: Stack(
             children: <Widget>[

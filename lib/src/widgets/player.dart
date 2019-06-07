@@ -68,6 +68,7 @@ class Player extends StatelessWidget {
                         ? SecondCounter(
                             playerNum: playerNum,
                             widgetWidth: widgetWidth,
+                            colorTheme: _playerTheme,
                           )
                         : Container(),
                   ],
