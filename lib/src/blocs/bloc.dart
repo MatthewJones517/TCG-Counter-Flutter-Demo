@@ -26,9 +26,6 @@ class Bloc {
   // Get repository
   Repository _repository = Repository();
 
-  // Settings
-  int defaultScore;
-
   Bloc() {
     init();
   }
@@ -49,9 +46,6 @@ class Bloc {
     // Get settings and add them to the stream
     _settings.sink.add(await _repository.getSettings());
 
-    // Get default score
-    defaultScore = _settings.value['defaultScore'];
-
     // Set player scores to whatever value is saved in memory.
     int p1Score = await _repository.getScore(
       playerNum: 1,
@@ -70,10 +64,10 @@ class Bloc {
     );
 
     scoreStreams['player1Score'].sink.add(
-          (p1Score != null) ? p1Score : defaultScore,
+          (p1Score != null) ? p1Score : _settings.value['defaultScore'],
         );
     scoreStreams['player2Score'].sink.add(
-          (p2Score != null) ? p2Score : defaultScore,
+          (p2Score != null) ? p2Score : _settings.value['defaultScore'],
         );
 
     // Set secondary counters
@@ -121,16 +115,16 @@ class Bloc {
 
   void resetScores() {
     // Reset Stream
-    scoreStreams['player1Score'].sink.add(defaultScore);
-    scoreStreams['player2Score'].sink.add(defaultScore);
+    scoreStreams['player1Score'].sink.add(_settings.value['defaultScore']);
+    scoreStreams['player2Score'].sink.add(_settings.value['defaultScore']);
     scoreStreams['player1AltCtr'].sink.add(0);
     scoreStreams['player2AltCtr'].sink.add(0);
     clickAreaStreams['clickAreaP1AltCtr'].add(false);
     clickAreaStreams['clickAreaP2AltCtr'].add(false);
 
     // Reset saved values
-    _repository.saveScore(playerNum: 1, score: defaultScore);
-    _repository.saveScore(playerNum: 2, score: defaultScore);
+    _repository.saveScore(playerNum: 1, score: _settings.value['defaultScore']);
+    _repository.saveScore(playerNum: 2, score: _settings.value['defaultScore']);
     _repository.saveCtr(playerNum: 1, ctr: 0);
     _repository.saveCtr(playerNum: 2, ctr: 0);
   }
@@ -251,10 +245,6 @@ class Bloc {
       mirrorPlayers: mirrorPlayers,
       secondaryCounters: secondaryCounters,
     );
-
-    if (defaultScore != null) {
-      defaultScore = newDefaultScore;
-    }
 
     _settings.sink.add(
       {
