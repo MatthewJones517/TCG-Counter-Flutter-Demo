@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'second_counter.dart';
 import '../blocs/provider.dart';
+import '../resources/themes.dart';
 
 class Player extends StatelessWidget {
   // Widget properties
-  final Color playerColor;
   final int playerNum;
   final bool isPortrait;
 
   Player(
-      {@required this.playerColor,
+      {
       @required this.playerNum,
       @required this.isPortrait});
 
@@ -38,10 +38,14 @@ class Player extends StatelessWidget {
           );
         }
 
+        // Get player color theme
+        Themes _themes = Themes();
+        Map<String, Color> _playerTheme = _themes.choose(settingsSnapshot.data["player${playerNum}Theme"]);
+
         return Expanded(
           flex: 5,
           child: Container(
-            color: playerColor,
+            color: _playerTheme['background'],
             child: Transform.rotate(
               angle: (playerNum == 1 && settingsSnapshot.data['mirrorPlayers'] == true) ? math.pi : 0,
               child: SafeArea(
@@ -52,9 +56,9 @@ class Player extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     // Player name and score
-                    playerInfo(_bloc, widgetWidth, settingsSnapshot.data),
+                    playerInfo(_bloc, widgetWidth, settingsSnapshot.data, _playerTheme['text']),
                     // Plus and minus indicators
-                    plusMinus(),
+                    plusMinus(_playerTheme['text']),
                     // Activates when an area is tapped as UI feedback
                     tapIndicators(_bloc),
                     // Catches user taps
@@ -78,18 +82,18 @@ class Player extends StatelessWidget {
   }
 
   // Display player title and current score
-  Widget playerInfo(Bloc _bloc, double widgetWidth, Map<String, dynamic> settingsSnapshot) {
+  Widget playerInfo(Bloc _bloc, double widgetWidth, Map<String, dynamic> settingsSnapshot, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        playerTitle(widgetWidth),
-        playerScore(_bloc, widgetWidth, settingsSnapshot),
+        playerTitle(widgetWidth, textColor),
+        playerScore(_bloc, widgetWidth, settingsSnapshot, textColor),
       ],
     );
   }
 
-  Widget playerTitle(double widgetWidth) {
+  Widget playerTitle(double widgetWidth, Color textColor) {
     return Padding(
       padding: EdgeInsets.only(bottom: (widgetWidth * .0025)),
       child: Text(
@@ -98,13 +102,13 @@ class Player extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: widgetWidth * .1,
-          color: Colors.white,
+          color: textColor,
         ),
       ),
     );
   }
 
-  Widget playerScore(Bloc _bloc, double widgetWidth, Map<String, dynamic> settingsSnapshot) {
+  Widget playerScore(Bloc _bloc, double widgetWidth, Map<String, dynamic> settingsSnapshot, Color textColor) {
     // Get the appropriate stream
     String scoreStreamName = _bloc.getScoreStreamName(player: playerNum);
 
@@ -125,7 +129,7 @@ class Player extends StatelessWidget {
             snapshot.data.toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white,
+              color: textColor,
               fontSize: widgetWidth * .3,
               fontWeight: FontWeight.bold,
             ),
@@ -135,7 +139,7 @@ class Player extends StatelessWidget {
     );
   }
 
-  Widget plusMinus() {
+  Widget plusMinus(Color textColor) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -150,11 +154,11 @@ class Player extends StatelessWidget {
             children: <Widget>[
               Text(
                 '-',
-                style: plusMinusFormatting(),
+                style: plusMinusFormatting(textColor),
               ),
               Text(
                 '+',
-                style: plusMinusFormatting(),
+                style: plusMinusFormatting(textColor),
               ),
             ],
           ),
@@ -163,10 +167,10 @@ class Player extends StatelessWidget {
     );
   }
 
-  TextStyle plusMinusFormatting() {
+  TextStyle plusMinusFormatting(Color textColor) {
     return TextStyle(
       fontSize: 40.0,
-      color: Colors.white,
+      color: textColor,
     );
   }
 

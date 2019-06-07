@@ -52,12 +52,10 @@ class Home extends StatelessWidget {
     return <Widget> [
       Player(
             playerNum: 1,
-            playerColor: Colors.red,
             isPortrait: isPortrait,
           ),
           Player(
             playerNum: 2,
-            playerColor: Colors.blue,
             isPortrait: isPortrait,
           ),
     ];
