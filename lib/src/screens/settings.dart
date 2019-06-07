@@ -35,7 +35,7 @@ class Settings extends StatelessWidget {
             ListView(
               children: <Widget>[
                 settingsHeading('Default Score:'),
-                defaultScoreTextfield(_bloc),
+                defaultScoreTextfield(_bloc, snapshot.data),
                 settingsHeading('Secondary Counters:'),
                 secondaryCounterSwitch(_bloc, snapshot.data),
                 settingsHeading('Mirror Players:'),
@@ -65,9 +65,9 @@ class Settings extends StatelessWidget {
     );
   }
 
-  Widget defaultScoreTextfield(Bloc _bloc) {
+  Widget defaultScoreTextfield(Bloc _bloc, Map<String, dynamic> snapshot) {
     TextEditingController _textController =
-        TextEditingController(text: _bloc.defaultScore.toString());
+        TextEditingController(text: snapshot['defaultScore'].toString());
 
     return Align(
       alignment: Alignment.center,
