@@ -5,26 +5,31 @@ class Themes {
   final Map<String, Color> _black = {
     "background": Colors.black,
     "text": Colors.white,
+    "secondaryCounterColor": Colors.black87,
   };
 
   final Map<String, Color> _red = {
     "background": Colors.red,
     "text": Colors.white,
+    "secondaryCounterColor": Colors.red[300],
   };
 
   final Map<String, Color> _white = {
     "background": Colors.white,
     "text": Colors.black,
+    "secondaryCounterColor": Colors.white70,
   };
 
   final Map<String, Color> _blue = {
     "background": Colors.blue,
     "text": Colors.white,
+    "secondaryCounterColor": Colors.blue[300],
   };
 
   final Map<String, Color> _green = {
     "background": Colors.green,
     "text": Colors.white,
+    "secondaryCounterColor": Colors.green[300],
   };
 
   Map<String, Color> choose(String color) {
