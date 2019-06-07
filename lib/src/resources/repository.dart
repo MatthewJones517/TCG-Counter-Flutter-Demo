@@ -68,7 +68,13 @@ class Repository {
       "defaultScore": await _getDefaultScore(),
       "mirrorPlayers": await _getMirrorPlayerStatus(),
       "secondaryCounters": await _getSecondaryCounterStatus(),
+      "player1Theme": await _getPlayerTheme(1),
+      "player2Theme": await _getPlayerTheme(2)
     };
+  }
+
+  Future<String> _getPlayerTheme(int playerNum) async {
+    return _prefsProvider.getPlayerTheme(playerNum);
   }
 
   void updateSettings({int defaultScore, bool mirrorPlayers, bool secondaryCounters}) {
