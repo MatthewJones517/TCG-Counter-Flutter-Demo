@@ -244,6 +244,8 @@ class Bloc {
       defaultScore: newDefaultScore,
       mirrorPlayers: mirrorPlayers,
       secondaryCounters: secondaryCounters,
+      player1Theme: player1Theme,
+      player2Theme: player2Theme,
     );
 
     _settings.sink.add(
