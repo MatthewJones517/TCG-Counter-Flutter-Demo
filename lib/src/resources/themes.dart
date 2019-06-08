@@ -5,7 +5,7 @@ class Themes {
   final Map<String, Color> _black = {
     "background": Colors.black,
     "text": Colors.white,
-    "secondaryCounterColor": Colors.black87,
+    "secondaryCounterColor": Colors.grey[800],
   };
 
   final Map<String, Color> _red = {
@@ -17,7 +17,7 @@ class Themes {
   final Map<String, Color> _white = {
     "background": Colors.white,
     "text": Colors.black,
-    "secondaryCounterColor": Colors.white70,
+    "secondaryCounterColor": Colors.black54,
   };
 
   final Map<String, Color> _blue = {
