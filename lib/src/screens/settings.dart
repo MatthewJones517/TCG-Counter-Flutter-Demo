@@ -42,9 +42,9 @@ class Settings extends StatelessWidget {
                 settingsHeading('Mirror Players:'),
                 mirrorPlayersSwitch(_bloc, snapshot.data),
                 settingsHeading('Player1 Theme:'),
-                playerThemeSelection(1, _bloc),
+                playerThemeSelection(1, _bloc, snapshot.data['player1Theme']),
                 settingsHeading('Player2 Theme:'),
-                playerThemeSelection(2, _bloc),
+                playerThemeSelection(2, _bloc, snapshot.data['player2Theme']),
               ],
             ),
           ],
@@ -141,7 +141,7 @@ class Settings extends StatelessWidget {
     );
   }
 
-  Widget playerThemeSelection(int player, Bloc bloc) {
+  Widget playerThemeSelection(int player, Bloc bloc, String activeTheme) {
     return Padding(
       padding: EdgeInsets.only(bottom: 20, top: 20),
       child: Row(
@@ -151,33 +151,38 @@ class Settings extends StatelessWidget {
             theme: 'white',
             player: player,
             bloc: bloc,
+            activeTheme: activeTheme,
           ),
           themeSwatch(
             theme: 'black',
             player: player,
             bloc: bloc,
+            activeTheme: activeTheme,
           ),
           themeSwatch(
             theme: 'red',
             player: player,
             bloc: bloc,
+            activeTheme: activeTheme,
           ),
           themeSwatch(
             theme: 'blue',
             player: player,
             bloc: bloc,
+            activeTheme: activeTheme,
           ),
           themeSwatch(
             theme: 'green',
             player: player,
             bloc: bloc,
+            activeTheme: activeTheme,
           ),
         ],
       ),
     );
   }
 
-  Widget themeSwatch({String theme, int player, Bloc bloc}) {
+  Widget themeSwatch({String theme, int player, Bloc bloc, String activeTheme}) {
     Themes swatchThemes = Themes();
 
     Map<String, dynamic> colors = swatchThemes.choose(theme);
@@ -190,9 +195,15 @@ class Settings extends StatelessWidget {
         );
       },
       child: Container(
-        color: colors['background'],
         height: 50,
         width: 50,
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: (activeTheme == theme) ? 7 : 0,
+            color: Colors.grey,
+          ),
+          color: colors['background'],
+        ),
       ),
     );
   }
