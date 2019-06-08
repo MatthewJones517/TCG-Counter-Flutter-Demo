@@ -54,7 +54,6 @@ class Repository {
 
   // Defaults to on
   Future<bool> _getMirrorPlayerStatus() async {
-    
     bool status = await _prefsProvider.getMirrorPlayerStatus();
     return (status != null) ? status : true;
   }
@@ -83,17 +82,39 @@ class Repository {
     return theme;
   }
 
-  void updateSettings({int defaultScore, bool mirrorPlayers, bool secondaryCounters}) {
+  void _updatePlayerTheme(int player, String theme) {
+    if (player == 1) {
+      _prefsProvider.updatePlayer1Theme(theme);
+    } else {
+      _prefsProvider.updatePlayer2Theme(theme);
+    }
+  }
+
+  void updateSettings({
+    int defaultScore,
+    bool mirrorPlayers,
+    bool secondaryCounters,
+    String player1Theme,
+    String player2Theme,
+  }) {
     if (defaultScore != null) {
       _saveDefaultScore(defaultScore);
     }
 
     if (mirrorPlayers != null) {
       _updateMirrorPlayerStatus(mirrorPlayers);
-    } 
+    }
 
-    if (secondaryCounters!= null) {
+    if (secondaryCounters != null) {
       _updateSecondaryCounterStatus(secondaryCounters);
+    }
+
+    if (player1Theme != null) {
+      _updatePlayerTheme(1, player1Theme);
+    }
+
+    if (player2Theme != null) {
+      _updatePlayerTheme(2, player2Theme);
     }
   }
 }
