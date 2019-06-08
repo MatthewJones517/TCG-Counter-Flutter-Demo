@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../blocs/provider.dart';
+import '../resources/themes.dart';
 import '../widgets/menu_drawer.dart';
 
 class Settings extends StatelessWidget {
@@ -41,7 +42,9 @@ class Settings extends StatelessWidget {
                 settingsHeading('Mirror Players:'),
                 mirrorPlayersSwitch(_bloc, snapshot.data),
                 settingsHeading('Player1 Theme:'),
+                playerThemeSelection(1, _bloc),
                 settingsHeading('Player2 Theme:'),
+                playerThemeSelection(2, _bloc),
               ],
             ),
           ],
@@ -109,9 +112,7 @@ class Settings extends StatelessWidget {
         width: 75,
         child: Switch(
           onChanged: (bool newValue) {
-            _bloc.updateSettings(
-              secondaryCounters: newValue
-            );
+            _bloc.updateSettings(secondaryCounters: newValue);
           },
           value: snapshot['secondaryCounters'],
           activeColor: Colors.blue,
@@ -136,6 +137,62 @@ class Settings extends StatelessWidget {
           activeColor: Colors.blue,
           inactiveTrackColor: Colors.blueGrey,
         ),
+      ),
+    );
+  }
+
+  Widget playerThemeSelection(int player, Bloc bloc) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 20, top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          themeSwatch(
+            theme: 'white',
+            player: player,
+            bloc: bloc,
+          ),
+          themeSwatch(
+            theme: 'black',
+            player: player,
+            bloc: bloc,
+          ),
+          themeSwatch(
+            theme: 'red',
+            player: player,
+            bloc: bloc,
+          ),
+          themeSwatch(
+            theme: 'blue',
+            player: player,
+            bloc: bloc,
+          ),
+          themeSwatch(
+            theme: 'green',
+            player: player,
+            bloc: bloc,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget themeSwatch({String theme, int player, Bloc bloc}) {
+    Themes swatchThemes = Themes();
+
+    Map<String, dynamic> colors = swatchThemes.choose(theme);
+
+    return GestureDetector(
+      onTap: () {
+        bloc.updateSettings(
+          player1Theme: (player == 1) ? theme : null,
+          player2Theme: (player == 2) ? theme : null,
+        );
+      },
+      child: Container(
+        color: colors['background'],
+        height: 50,
+        width: 50,
       ),
     );
   }
