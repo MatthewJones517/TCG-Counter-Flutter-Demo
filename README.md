@@ -1,5 +1,5 @@
 # TCG Counter
-This is a small demo app I wrote to familiarize myself with Google's Flutter framework. It keeps track of your life when playing games such as Magic the Gathering, Exceed, etc... 
+This is a small demo app I wrote to familiarize myself with Google's [Flutter](https://flutter.dev/) framework. It keeps track of your life when playing games such as Magic the Gathering, Exceed, etc... 
 
 
 ## Features
