@@ -1,16 +1,13 @@
-# tcg_counter
+# TCG Counter
+This is a small demo app I wrote to familiarize myself with Google's Flutter framework. It keeps track of your life when playing games such as Magic the Gathering, Exceed, etc... 
 
-A new Flutter project.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Change default starting score.
+- Add secondary counters (for things like poison damage).
+- Change player color themes.
+- Mirror player profiles (so two players can use the same phone).
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## Download
+Download TCG Counter on the (Android App Store)[https://play.google.com/store/apps/details?id=com.phonegap.tcgcounter&hl=en_US].
