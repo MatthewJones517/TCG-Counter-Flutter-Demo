@@ -10,4 +10,4 @@ This is a small demo app I wrote to familiarize myself with Google's Flutter fra
 - Mirror player profiles (so two players can use the same phone).
 
 ## Download
-Download TCG Counter on the (Android App Store)[https://play.google.com/store/apps/details?id=com.phonegap.tcgcounter&hl=en_US].
+Download TCG Counter on the [Android App Store](https://play.google.com/store/apps/details?id=com.phonegap.tcgcounter&hl=en_US).
