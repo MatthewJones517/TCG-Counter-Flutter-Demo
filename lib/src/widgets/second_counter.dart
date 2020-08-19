@@ -1,6 +1,4 @@
-/**
- * Displays secondary counter widget
- */
+// Displays secondary counter widget
 
 import 'package:flutter/material.dart';
 import '../blocs/provider.dart';
@@ -10,7 +8,10 @@ class SecondCounter extends StatelessWidget {
   final double widgetWidth;
   final Map<String, Color> colorTheme;
 
-  SecondCounter({@required this.playerNum, @required this.widgetWidth, @required this.colorTheme});
+  SecondCounter(
+      {@required this.playerNum,
+      @required this.widgetWidth,
+      @required this.colorTheme});
 
   Widget build(context) {
     // Access Bloc

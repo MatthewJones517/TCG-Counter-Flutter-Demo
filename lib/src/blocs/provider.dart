@@ -1,6 +1,4 @@
-/**
- * Provides access to bloc throughout the app.
- */
+// Provides access to bloc throughout the app.
 
 import 'package:flutter/material.dart';
 import 'bloc.dart';
@@ -14,6 +12,6 @@ class Provider extends InheritedWidget {
   bool updateShouldNotify(_) => true;
 
   static Bloc of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(Provider) as Provider).bloc;
+    return (context.dependOnInheritedWidgetOfExactType<Provider>()).bloc;
   }
 }

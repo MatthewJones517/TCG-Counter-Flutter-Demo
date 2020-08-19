@@ -1,6 +1,4 @@
-/**
- * Handles loading and saving all data
- */
+// Handles loading and saving all data
 
 import 'prefs_provider.dart';
 

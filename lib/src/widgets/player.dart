@@ -1,4 +1,4 @@
-/** This widget handles the player fields on the home screen */
+// This widget handles the player fields on the home screen
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -11,10 +11,7 @@ class Player extends StatelessWidget {
   final int playerNum;
   final bool isPortrait;
 
-  Player(
-      {
-      @required this.playerNum,
-      @required this.isPortrait});
+  Player({@required this.playerNum, @required this.isPortrait});
 
   Widget build(context) {
     // Set up properties
@@ -30,8 +27,8 @@ class Player extends StatelessWidget {
 
     return StreamBuilder(
       stream: _bloc.settings,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, dynamic>> settingsSnapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, dynamic>> settingsSnapshot) {
         if (!settingsSnapshot.hasData) {
           return Container(
             color: Colors.black,
@@ -40,14 +37,18 @@ class Player extends StatelessWidget {
 
         // Get player color theme
         Themes _themes = Themes();
-        Map<String, Color> _playerTheme = _themes.choose(settingsSnapshot.data["player${playerNum}Theme"]);
+        Map<String, Color> _playerTheme =
+            _themes.choose(settingsSnapshot.data["player${playerNum}Theme"]);
 
         return Expanded(
           flex: 5,
           child: Container(
             color: _playerTheme['background'],
             child: Transform.rotate(
-              angle: (playerNum == 1 && settingsSnapshot.data['mirrorPlayers'] == true) ? math.pi : 0,
+              angle: (playerNum == 1 &&
+                      settingsSnapshot.data['mirrorPlayers'] == true)
+                  ? math.pi
+                  : 0,
               child: SafeArea(
                 left: true,
                 right: true,
@@ -56,7 +57,8 @@ class Player extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     // Player name and score
-                    playerInfo(_bloc, widgetWidth, settingsSnapshot.data, _playerTheme['text']),
+                    playerInfo(_bloc, widgetWidth, settingsSnapshot.data,
+                        _playerTheme['text']),
                     // Plus and minus indicators
                     plusMinus(_playerTheme['text']),
                     // Activates when an area is tapped as UI feedback
@@ -83,7 +85,8 @@ class Player extends StatelessWidget {
   }
 
   // Display player title and current score
-  Widget playerInfo(Bloc _bloc, double widgetWidth, Map<String, dynamic> settingsSnapshot, Color textColor) {
+  Widget playerInfo(Bloc _bloc, double widgetWidth,
+      Map<String, dynamic> settingsSnapshot, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -109,7 +112,8 @@ class Player extends StatelessWidget {
     );
   }
 
-  Widget playerScore(Bloc _bloc, double widgetWidth, Map<String, dynamic> settingsSnapshot, Color textColor) {
+  Widget playerScore(Bloc _bloc, double widgetWidth,
+      Map<String, dynamic> settingsSnapshot, Color textColor) {
     // Get the appropriate stream
     String scoreStreamName = _bloc.getScoreStreamName(player: playerNum);
 

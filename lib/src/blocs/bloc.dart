@@ -1,6 +1,4 @@
-/**
- * Handles state management for the app. 
- */
+// Handles state management for the app.
 
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
@@ -239,7 +237,11 @@ class Bloc {
   }
 
   void updateSettings(
-      {int newDefaultScore, bool mirrorPlayers, bool secondaryCounters, String player1Theme, String player2Theme}) {
+      {int newDefaultScore,
+      bool mirrorPlayers,
+      bool secondaryCounters,
+      String player1Theme,
+      String player2Theme}) {
     _repository.updateSettings(
       defaultScore: newDefaultScore,
       mirrorPlayers: mirrorPlayers,
@@ -248,15 +250,23 @@ class Bloc {
       player2Theme: player2Theme,
     );
 
-    _settings.sink.add(
-      {
-        "defaultScore": (newDefaultScore != null) ? newDefaultScore : _settings.value['defaultScore'],
-        "mirrorPlayers": (mirrorPlayers != null) ? mirrorPlayers : _settings.value['mirrorPlayers'],
-        "secondaryCounters": (secondaryCounters != null) ? secondaryCounters : _settings.value['secondaryCounters'],
-        "player1Theme": (player1Theme != null) ? player1Theme : _settings.value['player1Theme'],
-        "player2Theme": (player2Theme != null) ? player2Theme : _settings.value['player2Theme'],
-      }
-    );
+    _settings.sink.add({
+      "defaultScore": (newDefaultScore != null)
+          ? newDefaultScore
+          : _settings.value['defaultScore'],
+      "mirrorPlayers": (mirrorPlayers != null)
+          ? mirrorPlayers
+          : _settings.value['mirrorPlayers'],
+      "secondaryCounters": (secondaryCounters != null)
+          ? secondaryCounters
+          : _settings.value['secondaryCounters'],
+      "player1Theme": (player1Theme != null)
+          ? player1Theme
+          : _settings.value['player1Theme'],
+      "player2Theme": (player2Theme != null)
+          ? player2Theme
+          : _settings.value['player2Theme'],
+    });
   }
 
   void dispose() {
